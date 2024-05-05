@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{plantilla/base :: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+
+<body>
+
+<div th:replace="~{plantilla/baseAdmin :: menu}"></div>
+
+<div class="container">
+
+    <h1>Bienvenido</h1>
+
+    <div th:if="${msgExito != null}" class="alert alert-success alert-dismissible mt-3">
+        [[${msgExito}]]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <p>Contenido principal</p>
+
+</div>
+
+<footer th:insert="~{plantilla/base :: pie_final}"></footer>
+<div th:insert="~{/plantilla/base :: scripts}"></div>
+
+</body>
+</html>

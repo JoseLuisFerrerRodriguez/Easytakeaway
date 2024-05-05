@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<div class="container-fluid">
+    <div th:replace="~{plantilla/base :: rastroCategorias}"></div>
+
+    <div class="row text-center header-background">
+        <th:block th:each="cat : ${categoria.hijos}">
+            <div class="col" th:if="${cat.activado == true}">
+                <a th:href="@{'/categoria/'+ ${cat.alias}}">
+                    <div class="text-center zoom">
+                        <img style="-webkit-filter: drop-shadow(3px 3px 3px #222); filter: drop-shadow(3px 3px 3px #222);
+                     width: 100px; height: 100px;" th:src="'/img/categorias/'+${cat.imagenURL}"/>
+                    </div>
+                    <div class="category_label text-center"> [[${cat.nombre}]] </div>
+                </a>
+            </div>
+        </th:block>
+    </div>
+
+    <div class="row separator-line">&nbsp;</div>
+
+    <div class="row text-center">
+        <th:block th:each="producto : ${listaProductos}">
+            <div class="col">
+                <div class="zoom">
+                    <a th:href="@{'/producto/'+${producto.alias}}">
+                        <img class="rounded" th:src="'/img/productos/'+${producto.imagenURL}" width="150"/>
+                        <br/>
+                        <div class="card-body">
+                            <b>[[${producto.nombreCorto}]]</b>
+                            <div>
+                                <span class="font-weight-bolder text-dark">[[${producto.precio}]] &#8364;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:replace="~{/plantilla/paginacion :: paginacion('/categoria/'+ ${categoria.alias})}"></div>
+
+</div>
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+</body>
+</html>

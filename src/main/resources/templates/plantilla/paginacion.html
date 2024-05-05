@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<a th:fragment="page_link(moduleURL, pageNum, label)"  class="page-link"  th:href="@{${moduleURL} + '/page/' + ${pageNum}}">
+    [[${label}]]
+</a>
+
+<div th:fragment="paginacion(url)" th:remove="tag">
+
+     <div class="text-center m-1" th:if="${totalItems > 0}">
+         <span style="font-weight: 400; color: #6e757d">[[#{paginacion.actual}]] # [[${startCount}]] [[#{paginacion.a}]] [[${endCount}]] [[#{paginacion.de}]] [[${totalItems}]]</span>
+     </div>
+     <div class="text-center m-1 mb-4 mt-5" th:unless="${totalItems > 0}">
+         <span style="font-weight: 400; color: #6e757d">[[#{paginacion.noencontrado}]]</span>
+     </div>
+
+     <div th:if="${totalPages > 1}">
+         <nav>
+             <ul class="pagination justify-content-center flex-wrap">
+                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, 1, #{paginacion.primero})}"></a>
+                 </li>
+                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
+                 </li>
+                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+                     th:each="i : ${#numbers.sequence(1, totalPages)}">
+                     <a th:replace="~{/plantilla/paginacion :: page_link(${url},${i}, ${i})}"></a>
+                 </li>
+                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
+                 </li>
+                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
+                 </li>
+             </ul>
+         </nav>
+     </div>
+</div>
+
+
+<a th:fragment="linkProductos(moduleURL, pageNum, label)"
+   class="page-link"
+   th:href="@{${moduleURL} + '/page/' + ${pageNum} +'?sortField=' +${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoriaId != null ? '&categoryId='+ categoriaId : ''}}">
+    [[${label}]]
+</a>
+
+
+<div th:fragment="paginacionProductos(url)" th:remove="tag">
+
+    <div class="text-center m-1" th:if="${totalItems > 0}">
+        <span style="font-weight: 400; color: #6e757d">[[#{paginacion.actual}]] # [[${startCount}]] [[#{paginacion.a}]] [[${endCount}]] [[#{paginacion.de}]] [[${totalItems}]]</span>
+    </div>
+    <div class="text-center m-1 mb-4 mt-5" th:unless="${totalItems > 0}">
+        <span style="font-weight: 400; color: #6e757d">[[#{paginacion.noencontrado}]]</span>
+    </div>
+
+    <div th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination justify-content-center flex-wrap">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, 1, #{paginacion.primero})}"></a>
+                </li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
+                </li>
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+                    th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url},${i}, ${i})}"></a>
+                </li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
+                </li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

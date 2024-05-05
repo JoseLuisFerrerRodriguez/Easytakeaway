@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col table-responsive">
+            <br>
+            <h2 class="border-light mb-3">[[#{mensaje.bienvenida}]] <span th:text="${usuario.nombre}"></span>!</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>[[#{perfil.datosContacto}]]</h3>
+                    <table id="usuario_datos" class="table table-striped text-center">
+                        <tbody>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.login}]]</th>
+                            <td th:text="${usuario.username}"> </td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.password}]]</th>
+                            <td>******</td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.nombre}]]</th>
+                            <td th:text="${usuario.nombre}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.apellidos}]]</th>
+                            <td th:text="${usuario.apellidos}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.telefono}]]</th>
+                            <td th:text="${usuario.telefono}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.email}]]</th>
+                            <td th:text="${usuario.email}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h3>[[#{perfil.datosDireccion}]]</h3>
+                    <table id="usuario_datos_direccion" class="table table-striped text-center">
+                        <tbody>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.via}]]</th>
+                            <td th:text="${usuario.via}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.direccion}]]</th>
+                            <td th:text="${usuario.direccion}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.numero}]]</th>
+                            <td th:text="${usuario.numero}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.restoDireccion}]]</th>
+                            <td th:text="${usuario.restoDireccion}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.ciudad}]]</th>
+                            <td th:text="${usuario.ciudad}"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-primary col-4">[[#{perfil.codigoPostal}]]</th>
+                            <td th:text="${usuario.codigoPostal}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="float-right btn-responsive">
+        <a href="/perfil/editar" class="btn custom_buttons btn-md my-0 p rounded">
+            <span>[[#{perfil.editar}]]</span>
+        </a>
+        <a href="/" class="btn custom_buttons btn-md my-0 p rounded">
+            <span>[[#{perfil.volver}]]</span>
+        </a>
+    </div>
+    <br>
+    <br>
+</div>
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+</body>
+</html>

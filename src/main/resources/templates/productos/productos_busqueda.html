@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(${pageTitle}, 'none')}"></head>
+
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<div class="container-fluid">
+    <div th:if="${totalItems} > 0">
+        <h4 class="text-center mb-4 mt-4" style="font-weight: 400;">[[#{productos.busqueda.msj}]] '[[${keyword}]]'</h4>
+    </div>
+    <div th:unless="${totalItems} > 0">
+        <h4 class="text-center mb-4 mt-4" style="font-weight: 400;">[[#{productos.busqueda.noencontrado}]]</h4>
+        <br><br><br>
+    </div>
+    <div class="row text-center">
+        <th:block th:each="producto: ${resultList}">
+            <div class="col">
+                <div class="zoom">
+                    <a th:href="@{'/producto/'+${producto.alias}}">
+                        <img class="rounded" th:src="'/img/productos/'+${producto.imagenURL}" width="150"/>
+                        <br/>
+                        <div class="card-body">
+                            <b>[[${producto.nombreCorto}]]</b>
+                            <div>
+                                <span class="font-weight-bolder text-dark">[[${producto.precio}]] &#8364;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:replace="~{/plantilla/paginacion :: paginacion('/buscar')}"></div>
+</div>
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+</body>
+</html>

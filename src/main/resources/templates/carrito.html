@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<main class="page">
+    <section class="shopping-cart dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2>[[#{carrito.titulo}]]</h2>
+                <p th:unless="${#lists.isEmpty(lineasPedido)}">[[#{carrito.subtitulo}]]</p>
+            </div>
+            <div class="content">
+                <div class="block-heading" th:color="red" th:if="${#lists.isEmpty(lineasPedido)}">
+                    <h3>[[#{carrito.sinproductos}]]</h3>
+                    <a th:href="@{'/'}">
+                        <button type="button" class="btn btn-primary">[[#{carrito.sinproductos.boton}]]</button>
+                    </a>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                        <div class="items" th:each="lp, status: ${lineasPedido}">
+                            <div class="product" th:with="producto = ${lp.producto}" th:id="'row' + ${status.count}">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="ml-2 mb-2">
+                                            <a class="fas fa-trash link-remove red-text"
+                                               th:rowNumber="${status.count}" th:href="@{'/carrito/borrar/' +${producto.id}}">
+                                            </a>
+                                        </div>
+                                        <a th:href="@{'/producto/' + ${producto.alias}}" class="zoom">
+                                            <img class="img-fluid mx-auto d-block image" th:src="'/img/productos/'+${producto.imagenURL}" width="130" height="130"/>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9 text-center mt-5">
+                                        <div class="info">
+                                            <div class="row">
+                                                <div class="col-md-5 product-name">
+                                                    <div class="product-name">
+                                                        <a th:text="${producto.nombre}" th:href="@{'/producto/' + ${producto.alias}}"></a>
+                                                        <div class="product-info mb-3">
+                                                            <div>[[#{carrito.categoria}]] <span class="value">[[${producto.categoria.nombre}]]</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 quantity" style="text-align: center">
+                                                    <div th:replace="~{plantilla/base :: control_cantidad(${lp.cantidad}, ${producto.id})}" style="max-width: 3rem">
+                                                    </div>
+                                                    <div class="subtotal" style="font-weight: 400">
+                                                        <span>x [[${producto.precio}]]</span><span> &#8364;</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 price">
+                                                    <span class="productSubtotalTitle">[[#{carrito.subtotal}]]</span>
+                                                    <span class="productSubtotal" style="width:800px; margin:0 auto; font-weight: 500;"
+                                                          th:id="'subtotal' + ${producto.id}">[[${#numbers.formatDecimal(lp.subtotal,0,2,'COMMA')}]]</span><span>&#8364;</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4" th:unless="${#lists.isEmpty(lineasPedido)}">
+                        <div class="summary">
+
+                            <h3>[[#{carrito.resumen}]]</h3>
+                            <div class="summary-item"><span class="text">[[#{carrito.total}]]</span>
+                                <span class="price" id="totalAmount"></span>
+                            </div>
+                            <a th:href="@{'/procesar'}" class="payment-btn btn-lg btn-block mt-3 text-center">[[#{carrito.procesar}]]</a>
+                            <a th:href="@{'/'}" class="d-flex justify-content-center">
+                                <button type="button" class="btn-lg btn-sm mt-3 custom_buttons">[[#{carrito.sinproductos.boton}]]
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div th:insert="~{plantilla/base :: scripts}"></div>
+    <script th:src="@{/js/carrito.js}"></script>
+
+    <div th:replace="~{plantilla/ventanas :: mostrarEmergente}"></div>
+
+    <footer th:insert="~{plantilla/base :: pie}"></footer>
+
+</main>
+</body>
+</html>

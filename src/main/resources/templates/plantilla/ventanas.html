@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:fragment="mostrarEmergente" class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">[[#{ventana.emergente.titulo}]]</h4>
+            </div>
+            <div class="modal-body">
+                <span id="modalBody">[[#{ventana.emergente.contenido}]]</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger rounded" data-dismiss="modal">[[#{ventana.emergente.cerrar}]]</button>
+            </div>
+        </div>
+
+    </div>
+</div>

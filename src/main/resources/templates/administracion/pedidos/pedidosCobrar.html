@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+
+<body>
+<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div class="container-fluid">
+    <div>
+        <h2 class="mt-3 text-center">[[#{admin.pedidos.titulo}]]</h2>
+    </div>
+    <nav style="background: #343a40" class="navbar navbar-expand-lg mt-3 mb-4 rounded">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nextNav" aria-controls="nextNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars" style="color:#fff; font-size:26px;"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="nextNav">
+            <ul class="navbar-nav mx-auto justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link rounded" th:href="@{'/admin/pedidos'}">[[#{admin.pedidos.todos}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded" th:href="@{'/admin/pedidos/procesar/page/1?sortField=fecha&sortDir=asc'}">[[#{admin.pedidos.procesar}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded" th:href="@{'/admin/pedidos/enviar/page/1?sortField=fecha&sortDir=asc'}">[[#{admin.pedidos.enviar}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded" th:href="@{'/admin/pedidos/cobrar/page/1?sortField=fecha&sortDir=asc'}">[[#{admin.pedidos.cobrar}]]</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div>
+        <table class="table table-bordered table-striped table-hover table-responsive-xl text-center">
+            <thead class="thead-dark">
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'id'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.numero}]]
+                    </a>
+                    <a th:if="${sortField == 'id'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.numero}]]
+                    </a>
+                    <span th:if="${sortField == 'id'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">[[#{admin.pedidos.cliente}]]</th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'fecha'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=fecha&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.fecha}]]
+                    </a>
+                    <a th:if="${sortField == 'fecha'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=fecha&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.fecha}]]
+                    </a>
+                    <span th:if="${sortField == 'fecha'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">[[#{admin.pedidos.productos}]]</th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'estado'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=estado&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.estadopedido}]]
+                    </a>
+                    <a th:if="${sortField == 'estado'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=estado&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.estadopedido}]]
+                    </a>
+                    <span th:if="${sortField == 'estado'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">[[#{admin.pedidos.mesa}]]</th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'tipoEnvio'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=tipoEnvio&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.tipoenvio}]]
+                    </a>
+                    <a th:if="${sortField == 'tipoEnvio'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=tipoEnvio&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.tipoenvio}]]
+                    </a>
+                    <span th:if="${sortField == 'tipoEnvio'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">[[#{admin.pedidos.estadoenvio}]]</th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'importeTotal'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=importeTotal&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.total}]]
+                    </a>
+                    <a th:if="${sortField == 'importeTotal'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=importeTotal&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.total}]]
+                    </a>
+                    <span th:if="${sortField == 'importeTotal'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'pagado'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=pagado&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.estadoppagado}]]
+                    </a>
+                    <a th:if="${sortField == 'pagado'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=pagado&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.estadoppagado}]]
+                    </a>
+                    <span th:if="${sortField == 'pagado'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">
+                    <a th:if="${sortField != 'tipoPago'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=tipoPago&sortDir=' + ${sortDir}}">
+                        [[#{admin.pedidos.pago}]]
+                    </a>
+                    <a th:if="${sortField == 'tipoPago'}" class="text-white"
+                       th:href="@{'/admin/pedidos/page/' + ${currentPage} + '?sortField=tipoPago&sortDir=' + ${reverseSortDir}}">
+                        [[#{admin.pedidos.pago}]]
+                    </a>
+                    <span th:if="${sortField == 'tipoPago'}"
+                          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
+                <th class="d-none d-sm-table-cell">[[#{admin.pedidos.acciones}]]</th>
+            </thead>
+            <tbody>
+            <tr th:each="pedido : ${pedidos}">
+                <td th:text="${pedido?.id}"></td>
+                <td style="text-align:left"><a class="fas fa-id-card" data-toggle="modal" th:href="'#datosCliente' + ${pedido?.id}" role="button"></a>&nbsp;[[${pedido?.nombre}]]</td>
+                <div th:replace="~{/administracion/pedidos/ventanasDatos :: ventanaDatosCliente(${pedido?.id})}"></div>
+                <td th:text="${#dates.format(pedido?.fecha,'dd/MM/yyyy HH:mm:ss')}"></td>
+                <td><a class="fas fa-utensils" data-toggle="modal" th:href="'#datosProductos' + ${pedido?.id}" role="button"></a></td>
+                <div th:replace="~{/administracion/pedidos/ventanasDatos :: ventanaDatosLineas(${pedido?.id})}"></div>
+                <td th:text="${pedido?.estado}"></td>
+                <td th:text="${pedido?.mesa?.numeroMesa}"></td>
+                <div th:if="${pedido?.tipoEnvio} eq '0'">
+                    <td>[[#{admin.pedidos.envio.local}]]</td>
+                </div>
+                <div th:unless="${pedido.tipoEnvio} eq '0'">
+                    <td>[[#{admin.pedidos.envio.domicilio}]]
+                        <a data-toggle="modal" th:href="'#datosEnvio' + ${pedido?.id}" role="button">
+                            <i class="fas fa-search-location"></i>
+                        </a>
+                        <div th:replace="~{/administracion/pedidos/ventanaDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
+                    </td>
+                </div>
+                <td th:text="${pedido?.estadoEnvio}"></td>
+                <td>[[${pedido.importeTotal}]] &#8364;</td>
+                <td><input type="checkbox" th:checked="${pedido?.pagado}" disabled="disabled"/></td>
+                <div th:if="${pedido?.tipoPago} eq '0'">
+                    <td>[[#{proceso.pedido.pago.local}]]</td>
+                </div>
+                <div th:unless="${pedido.tipoPago} eq '0'">
+                    <td>[[#{proceso.pedido.pago.tarjeta}]]</td>
+                </div>
+                <td>
+                    <a th:href="@{'/admin/pedidos/cambiarestado/'+${pedido?.id}+'?estado=cobrado'}" class="btn btn-md btn-warning rounded">
+                        <span>[[#{admin.pedidos.cobrado}]]</span>
+                    </a>
+                </td>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="~{/plantilla/paginacion :: paginacion('/admin/pedidos')}"></div>
+</div>
+<footer th:insert="~{/plantilla/base :: pie_final}"></footer>
+<div th:insert="~{/plantilla/base :: scripts}"></div>
+</body>
+</html>

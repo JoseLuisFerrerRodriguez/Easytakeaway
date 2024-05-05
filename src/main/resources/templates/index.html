@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<!-- carrusel -->
+<div id="carouselFull" class="carousel slide carousel-fade" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselFull" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselFull" data-slide-to="1"></li>
+        <li data-target="#carouselFull" data-slide-to="2"></li>
+        <li data-target="#carouselFull" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <a th:href="@{'/'}">
+                <img class="d-block img-fluid" src="img/banner/Banner1.png" alt="First slide">
+                <div class="carousel-caption d-md-block" style="margin-bottom: 55px">
+                    <h3 class="text-left">[[#{home.banner1.titulo}]]</h3>
+                    <p class="text-left">[[#{home.banner1.descripcion}]]</p>
+                </div>
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a th:href="@{'/categorias'}">
+                <video class="d-block img-fluid" autoplay loop muted> <source src="img/banner/parrillaBanner.mp4"/> </video>
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a th:href="@{'/'}">
+                <img class="d-block img-fluid" src="img/banner/Banner2.png" alt="Second slide">
+                <div class="carousel-caption d-md-block" style="margin-bottom: 55px">
+                    <h3 class="text-left">[[#{home.banner2.titulo}]]</h3>
+                    <p class="text-left">[[#{home.banner2.descripcion}]]</p>
+                </div>
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a th:href="@{'/'}">
+                <img class="d-block img-fluid" src="img/banner/Banner3.png" alt="Third slide">
+                <div class="carousel-caption d-md-block" style="margin-bottom: 55px">
+                    <h3 class="text-left">[[#{home.banner3.titulo}]]</h3>
+                    <p class="text-left">[[#{home.banner3.descripcion}]]</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselFull" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselFull" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<!-- Contenido principal -->
+<main>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg mt-3 mb-4 rounded">
+            <span class="navbar-brand">[[#{home.submenu.categorias}]]</span>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nextNav" aria-controls="nextNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars" style="color:#fff; font-size:26px;"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="nextNav">
+                <ul class="navbar-nav mx-auto justify-content-center">
+                    <div th:each="categoria : ${listaCategorias}">
+                        <li class="nav-item">
+                            <a class="nav-link rounded" th:href="@{'/categoria/'+ ${categoria.alias}}">[[${categoria.nombre}]]</a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+        <section class="text-center mb-4">
+            <div class="row wow faceIn">
+                <th:block th:each="producto : ${listaProductos}">
+                    <div class="col-6 col-sm-6 col-md-3 my-3 mb-4">
+                        <div class="card">
+                            <a th:href="@{'/producto/'+${producto.alias}}">
+                                <div class="view overlay text-center">
+                                    <img class="card-img-top" style="max-width: 150px; max-height: 150px; display: inline;" th:src="'/img/productos/'+${producto.imagenURL}" />
+                                    <div class="mask rgba-white-slight"></div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="grey-text">
+                                        <h5>[[${producto.nombre}]]</h5>
+                                    </div>
+                                    <h5 class="font-weight-bold blue-text">
+                                        <strong> [[${producto.precio}]] &#8364; </strong>
+                                    </h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+
+</body>
+</html>

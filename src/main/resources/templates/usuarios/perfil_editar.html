@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:replace="~{plantilla/base :: menu}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <br>
+            <h2 class="border-light mb-3">[[#{perfil.editar.titulo}]] <span th:text="${usuario.nombre}"></span>!</h2>
+            <form th:action="@{/perfil/guardar}" th:object="${usuario}" method="post" role="form">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>[[#{perfil.datosContacto}]]</h3>
+                        <table id="usuario_datos" class="table table-striped text-center">
+                            <tbody>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.login}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{username}" readonly></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.password}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="password" th:field="*{password}" required></label>
+                                    <p class="col-16 text-danger" th:errors="*{password}"  th:if="${#fields.hasErrors('password')}"> </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.nombre}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{nombre}" maxlength="30" required></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.apellidos}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{apellidos}" maxlength="50" required></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.telefono}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{telefono}" maxlength="15" required></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.email}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{email}" maxlength="100" readonly></label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>[[#{perfil.datosDireccion}]]</h3>
+                        <table id="usuario_datos_direccion" class="table table-striped text-center">
+                            <tbody>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.via}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{via}" maxlength="10"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.direccion}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{direccion}" maxlength="50"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.numero}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{numero}" maxlength="15"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.restoDireccion}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{restoDireccion}" maxlength="50"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.ciudad}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{ciudad}" maxlength="40"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="table-primary col-4">[[#{perfil.codigoPostal}]]</th>
+                                <td>
+                                    <label><input class="form-control form-control-sm col-16" type="text" th:field="*{codigoPostal}" maxlength="5"></label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <input type="submit" id="updateBtn" class="d-none"/>
+            </form>
+        </div>
+    </div>
+    <div class="float-right btn-responsive">
+        <label for="updateBtn" class="btn custom_buttons btn-md my-0 p rounded" tabindex="0">[[#{perfil.editar.actualizar}]]</label>
+        <a href="/perfil" class="btn custom_buttons btn-md my-0 p rounded">
+            <span>[[#{perfil.editar.volver}]]</span>
+        </a>
+    </div>
+    <br>
+    <br>
+</div>
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+</body>
+</html>

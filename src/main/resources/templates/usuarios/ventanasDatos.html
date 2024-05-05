@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base :: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:insert="~{plantilla/base :: scripts}"></div>
+
+<div th:fragment="ventanaDatosEnvio(id)">
+    <div class="modal fade" th:id="'datosEnvio' + ${id}" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-1"></div>
+                    <div class="col-10 text-center">
+                        <h5 class="modal-title">[[#{admin.pedidos.tituloDatosEnvio}]]</h5>
+                    </div>
+                    <div class="col-1 ms-3">
+                        <a type="button" class="close" aria-label="Close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="rounded p-3">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">[[#{pedidos.estado.enviado}]]</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:value="${pedido?.estadoEnvio}" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">[[#{pedidos.direccion}]]</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:value="${pedido?.direccion}" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">[[#{pedidos.ciudad}]]</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:value="${pedido?.ciudad}" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">[[#{pedidos.codigopostal}]]</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:value="${pedido?.codigoPostal}" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="ventanaDatosProductos(id)">
+    <div class="modal fade" th:id="'datosProductos' + ${id}" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-1"></div>
+                    <div class="col-10 text-center">
+                        <h5 class="modal-title">[[#{admin.pedidos.tituloDatosLineas}]]</h5>
+                    </div>
+                    <div class="col-1 ms-3">
+                        <a type="button" class="close" aria-label="Close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="rounded p-3">
+                        <div class="row mb-3 border-bottom">
+                            <div class="col-auto">
+                                <strong class="text-uppercase text-left">[[#{admin.pedidos.producto}]]</strong>
+                            </div>
+                            <div class="col">
+                                <strong class="text-uppercase text-left">[[#{admin.pedidos.cantidad}]]</strong>
+                            </div>
+                            <div class="col">
+                                <strong class="text-uppercase text-left">[[#{admin.pedidos.iva}]]</strong>
+                            </div>
+                            <div class="col">
+                                <strong class="text-uppercase text-left">[[#{admin.pedidos.total}]]</strong>
+                            </div>
+                        </div>
+                        <div th:each="lp, iterStat: ${pedido?.lineasPedido}" class="row mb-2 border-bottom">
+                            <div class="col-auto">
+                                <span class="text-left" th:text="${lp.nombreProducto}"></span>
+                            </div>
+                            <div class="col">
+                                <span class="text-left" th:text="${lp.cantidad}"></span>
+                            </div>
+                            <div class="col">
+                                <span class="text-left" th:text="${lp.iva}"></span>
+                            </div>
+                            <div class="col">
+                                <span class="text-left" th:text="${lp.total}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

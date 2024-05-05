@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+
+<body>
+<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div class="container-fluid">
+    <div>
+        <h2 class="mt-3 text-center" th:if="${nuevo}">[[#{admin.mesas.titulo.crear}]]</h2>
+        <h2 class="mt-3 text-center" th:unless="${nuevo}">[[#{admin.mesas.titulo.modificar}]]</h2>
+    </div>
+    <form th:action="@{/admin/mesa/guardar}" th:object="${mesa}" method="post" style="max-width: 700px; margin: 0 auto;" onsubmit="return checkTitleUnique(this)">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="border border-dark rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">[[#{admin.mesas.numero}]]</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"  th:field="*{numeroMesa}" minlength="1" maxlength="10" required/>
+                </div>
+                <div class="col-sm-4"></div>
+                <p class="col-sm-8 text-danger" th:errors="*{numeroMesa}" th:if="${#fields.hasErrors('numeroMesa')}"> </p>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">[[#{admin.mesas.capacidad}]]</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"  th:field="*{capacidad}" minlength="1" maxlength="10" required/>
+                </div>
+                <div class="col-sm-4"></div>
+                <p class="col-sm-8 text-danger" th:errors="*{capacidad}" th:if="${#fields.hasErrors('capacidad')}"> </p>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">[[#{admin.mesas.posicion}]]</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{posicion}"/>
+                </div>
+                <p class="col-sm-8 text-danger" th:errors="*{posicion}" th:if="${#fields.hasErrors('posicion')}"> </p>
+            </div>
+            <input type="hidden" class="form-control" th:field="*{imagenQR}" readonly/>
+            <div class="text-center">
+                <button type="submit" class="custom_buttons rounded" style="height:40px;width: 80px;">[[#{admin.mesas.crear.aceptar}]] </button>
+                <button type="button" id="cancelBtn" class="custom_buttons rounded" style="height:40px;width: 80px;">[[#{admin.mesas.crear.cancelar}]] </button>
+            </div>
+        </div>
+    </form>
+    <footer th:insert="~{/plantilla/base :: pie_final}"></footer>
+</div>
+<div th:insert="~{/plantilla/base :: scripts}"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#cancelBtn').on("click", function () {
+            window.location = "[[@{/admin/mesas}]]";
+        });
+    });
+</script>
+
+<div th:replace="~{/plantilla/ventanas :: mostrarEmergente}"></div>
+</body>
+</html>

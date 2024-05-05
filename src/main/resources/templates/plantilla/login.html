@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<head th:replace="~{plantilla/base :: head(#{nombreEmpresa}, 'none')}"></head>
+<body>
+
+<div th:insert="~{plantilla/base :: scripts}"></div>
+
+<div th:fragment="ventanaLogin">
+    <div class="modal fade" id="ventanaLogin" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-1"></div>
+                    <div class="col-10 text-center">
+                        <h5 class="modal-title">[[#{login.titulo}]]</h5>
+                    </div>
+                    <div class="col-1 ms-3">
+                        <a type="button" class="close" aria-label="Close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-body d-flex justify-content-center">
+                    <form th:action="@{/login}" onsubmit="return check(this);" method="post">
+                        <input class="text-center rounded" type="text" name="username" id="content1"
+                               th:attr="placeholder=#{login.usuario}" required minlength="4" maxlength="60"/>
+                        <input class="text-center rounded" type="password" name="password" id="content2"
+                               th:attr="placeholder=#{login.password}" required minlength="4" maxlength="40"/>
+                        <div id="validationMessage" style="color: red; margin-bottom: 10px;"></div>
+                        <button type="submit" class="btn-block rounded" style="height: 35px;">[[#{login.aceptar}]] </button>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <span class="message text-center">
+                        [[#{login.textoRegistro}]]<a th:href="@{/registro}"><br>[[#{login.crearCuenta}]]</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function check(form) {
+            urlValue = "[[@{'/verificarLogin'}]]";
+            content1Value = document.getElementById("content1").value;
+            content2Value = document.getElementById("content2").value;
+
+            csrfValue = $("input[name=_csrf]").val();
+
+            params = {content1: content1Value, content2: content2Value, _csrf: csrfValue};
+
+            $.ajax({method: "POST",
+                    url: urlValue,
+                    data: params,
+                    success: function(result) {
+                        if(result == "OK") {
+                            form.submit();
+                        } else {
+                            document.getElementById("validationMessage").textContent = result;
+                        }
+                    },
+                    error: function(req, status, error) {
+                        document.getElementById("validationMessage").textContent = req + " " + status + " " + error;
+                    }
+            });
+
+            return false;
+
+        }
+    </script>
+
+</div>
+
+</body>
+</html>

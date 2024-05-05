@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+
+<body>
+<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div class="container-fluid">
+    <div>
+        <h2 class="mt-3 text-center">[[#{admin.mesas.titulo}]]</h2>
+        <a th:href="@{/admin/mesas/nuevo}"><i class="fas fa-folder-plus fa-2x"></i></a>
+    </div>
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[#{${message}}]]
+    </div>
+    <div th:if="${messageError != null}" class="alert alert-danger text-center">
+        [[#{${messageError}}]]
+    </div>
+    <div>
+        <table class="table table-bordered table-striped table-hover table-responsive-xl text-center">
+            <thead class="thead-dark" style="background-color: #000000">
+            <th>[[#{admin.mesas.id}]]</th>
+            <th>[[#{admin.mesas.numero}]]</th>
+            <th>[[#{admin.mesas.capacidad}]]</th>
+            <th>[[#{admin.mesas.posicion}]]</th>
+            <th>[[#{admin.mesas.qr}]]</th>
+            <th>[[#{admin.acciones}]]</th>
+            </thead>
+            <tbody>
+            <tr th:each="mesa : ${mesas}">
+                <td th:text="${mesa.id}"></td>
+                <td th:text="${mesa.numeroMesa}"></td>
+                <td th:text="${mesa.capacidad}"></td>
+                <td th:text="${mesa.posicion}"></td>
+                <td><img class="img-fluid mx-auto d-block image" width="75" height="75" th:src="'/img/mesas/'+${mesa.imagenQR}"/></td>
+                <td>
+                    <a class="far fa-edit fa-2x green-text"  th:href="@{'/admin/mesa/editar/' + ${mesa.id}}" title="Editar esta mesa"></a>
+                    <a class="fas fa-trash-alt fa-2x red-text" th:href="@{'/admin/mesa/borrar/' + ${mesa.id}}" title="Borrar esta mesa"></a>
+                </td>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="~{/plantilla/paginacion :: paginacion('/admin/mesas')}"></div>
+</div>
+
+<footer th:insert="~{/plantilla/base :: pie_final}"></footer>
+<div th:insert="~{/plantilla/base :: scripts}"></div>
+
+</body>
+</html>

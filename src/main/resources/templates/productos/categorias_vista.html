@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{plantilla/base :: menu}"></div>
+
+<div class="container-fluid">
+    <div>
+        <h4 class="text-center mb-4 mt-4" style="font-weight: 400;">[[#{categorias.titulo}]]</h4>
+    </div>
+    <div class="row">
+        <div class="col" th:each="categoria : ${listaCategorias}">
+            <a th:href="@{'/categoria/'+ ${categoria.alias}}">
+                <div class="text-center zoom">
+                    <img style="-webkit-filter: drop-shadow(3px 3px 3px #222); filter: drop-shadow(3px 3px 3px #222);
+                     width: 140px; height: 140px;" th:src="'/img/categorias/'+${categoria.imagenURL}"/>
+                </div>
+                <div class="category_label text-center mt-4">[[${categoria.nombre}]]</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{plantilla/base :: pie}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+</body>
+</html>

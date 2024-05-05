@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+
+<body>
+
+
+<div class="message-box">
+
+    <h1>[[#{error.titulo}]]</h1>
+
+    <p>[[#{error.mensaje}]]</p>
+
+    <div th:if="${errorMessage}">
+        <h4 th:text="${errorMessage}"></h4>
+    </div>
+
+    <div th:if="${error}">
+        <h4 th:text="${error}"></h4>
+    </div>
+    <div class="buttons-con">
+        <div class="action-link-wrap">
+            <a href="/" class="link-button">[[#{error.mensajeVolver}]]</a>
+        </div>
+    </div>
+
+
+</div>
+
+<div th:insert="~{plantilla/base :: scripts}"></div>
+
+</body>
+</html>
+

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+
+<body class="bg-white">
+<div class="container">
+    <a href="/" class="navbar-brand waves-effect rounded mt-2">
+        <img class="img-rounded" th:src="@{/img/logo.jpg}" width="50" height="50">
+    </a>
+    <div class="language_selector mt-4 float-right row">
+        <div class="col border-right">
+            <a class="custom_link waves-effect rounded" th:href="@{'?lang=es'}">[[#{menu.leng.españa}]]</a>
+        </div>
+        <div class="col">
+            <a class="custom_link waves-effect rounded" th:href="@{'?lang=en'}">[[#{menu.leng.ingles}]]</a>
+        </div>
+    </div>
+    <hr class="mt-0"/>
+
+    <div class="py-4 left">
+        <h2>[[#{proceso.pedido.titulo}]]</h2>
+    </div>
+    <div class="py-4 left" th:if="${error}">
+        <div class="alert alert-danger">[[#{proceso.pedido.error}]]</div>
+    </div>
+    <div class="row">
+        <div class="custom_product col-md-4 order-md-2 mb-4 sticky-top">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">[[#{proceso.pedido.carrito}]]</span>
+            </h4>
+            <ul class="custom_product list-group mb-3 sticky-top">
+                <div class="items" th:each="lp: ${lineasPedido}">
+                    <div class="product" th:with="producto = ${lp.producto}">
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <img class="img-fluid mx-auto d-block image" th:src="'/img/productos/'+${producto.imagenURL}" width="50" height="50"/>
+                                <h6 class="my-0">
+                                    <a th:text="${producto.nombre}" th:href="@{'/producto/' + ${producto.alias}}"></a>
+                                </h6>
+                            </div>
+                            <div class="text-muted my-3">
+                                <span>x</span><span>[[${lp.cantidad}]]</span>
+                            </div>
+                            <div class="text-muted my-3">
+                                    <span class="productSubtotal" th:id="'subtotal' + ${producto.id}">[[${#numbers.formatDecimal(lp.subtotal,0,2,'COMMA')}]]</span><span>&#8364;</span>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+                <li class="list-group-item d-flex justify-content-between">
+                    <div class="summary-item"><span class="text">[[#{proceso.pedido.total}]]</span>
+                        <span class="price" style="margin-left: 70px; font-size: 21px; font-weight: 500;" id="totalAmount"></span>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class=" text-center">
+                        <label for="checkoutBtn" class="btn custom_buttons btn-md my-0 p rounded" tabindex="0">[[#{proceso.pedido.aceptar}]]</label>
+                        <a th:href="@{'/carrito'}" class="d-flex justify-content-center">
+                            <button type="button" class="btn-lg btn-sm mt-3 custom_buttons">[[#{proceso.pedido.cancelar}]]
+                            </button>
+                        </a>
+                    </div>
+                    <span class="grey-text" style="font-size: 12px">[[#{proceso.pedido.terminos}]]
+                    <ul class="ml-2">
+                        <li class="ml-3">
+                            [[#{proceso.pedido.termino1}]]
+                        </li>
+                        <li class="ml-3">
+                            [[#{proceso.pedido.termino2}]]
+                        </li>
+                    </ul></span>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-md-8 order-md-1">
+            <h5 class="mb-4">[[#{proceso.pedido.detalleContacto}]]</h5>
+            <div class="userInfo">
+                <div class="row ml-4">
+                    <div class="col-md-6 mb-3">
+                        <label>[[#{proceso.pedido.nombre}]]</label>
+                        <span th:text="${usuario.nombre}"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>[[#{proceso.pedido.apellidos}]]</label>
+                        <span th:text="${usuario.apellidos}"></span>
+                    </div>
+                </div>
+                <div class="row ml-4">
+                    <div class="col-md-6 mb-3">
+                        <label>[[#{proceso.pedido.email}]]</label>
+                        <span th:text="${usuario.email}"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3 ml-4">
+                    <label>[[#{proceso.pedido.telefono}]]</label>
+                    <span th:text="${usuario.telefono}"></span>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+
+            <h5 class="mb-3">[[#{proceso.pedido.detalleEntrega}]]</h5>
+
+            <form th:action="@{/procesar}" th:object="${pedido}" onsubmit="return check(this);" method="post">
+                <input type="hidden" th:field="*{importeTotal}" id="importeTotal" />
+                <h6>[[#{proceso.pedido.tipoenvio}]]</h6>
+                <div class="d-block my-3">
+                    <div class="custom-control custom-radio ml-4">
+                        <input th:field="*{tipoEnvio}" id="local" name="deliveryMethod" type="radio" class="custom-control-input" required th:value="0" checked>
+                        <label class="custom-control-label" for="local">[[#{proceso.pedido.tipoenvio.local}]]</label>
+                    </div>
+                    <div class="custom-control custom-radio ml-4">
+                        <input th:field="*{tipoEnvio}" id="domicilio" name="deliveryMethod" type="radio" class="custom-control-input" required th:value="1">
+                        <label class="custom-control-label" for="domicilio">[[#{proceso.pedido.tipoenvio.envio}]]</label>
+                    </div>
+                </div>
+                <div id="contenidoDireccion" th:style="${pedido.tipoEnvio == 1 ? 'display:block' : 'display:none'}">
+                    <div class="mb-3 ml-4">
+                        <label for="address">[[#{proceso.pedido.direccion}]]</label>
+                        <input style="width: 300px;" th:field="*{direccion}" type="text" class="form-control" id="address">
+                        <div th:if="${errdireccion}" >
+                            <div class="alert alert-danger">[[#{proceso.pedido.errorDireccion}]]</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 ml-4">
+                        <label for="city">[[#{proceso.pedido.ciudad}]]</label>
+                        <input style="width: 300px;" th:field="*{ciudad}" type="text" class="form-control" id="city">
+                        <div th:if="${errciudad}">
+                            <div class="alert alert-danger">[[#{proceso.pedido.errorCiudad}]]</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 ml-4">
+                        <label for="city">[[#{proceso.pedido.codigopostal}]]</label>
+                        <input style="width: 300px;" th:field="*{codigoPostal}" type="text" class="form-control" id="codigopostal">
+                        <div th:if="${errcodigopostal}">
+                            <div class="alert alert-danger">[[#{proceso.pedido.errorCodigoPostal}]]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+
+                <h5 class="mb-3">[[#{proceso.pedido.pago}]]</h5>
+                <div th:if="${errpago}">
+                    <div class="alert alert-danger">[[#{proceso.pedido.error.pago}]]</div>
+                </div>
+                <div th:if="${errpago}" class="invalid-feedback">
+                    [[#{proceso.pedido.errorCiudad}]]
+                </div>
+                <div class="d-block my-3">
+                    <div class="custom-control custom-radio ml-4">
+                        <input th:field="*{tipoPago}" id="store" name="paymentMethod" type="radio" class="custom-control-input" required th:value="0" checked>
+                        <label class="custom-control-label" for="store">[[#{proceso.pedido.pago.local}]]</label>
+                    </div>
+                    <div class="custom-control custom-radio ml-4">
+                        <input th:field="*{tipoPago}" id="card" name="paymentMethod" type="radio" class="custom-control-input" required th:value="1">
+                        <label class="custom-control-label" for="card">[[#{proceso.pedido.pago.tarjeta}]]</label>
+                    </div>
+                </div>
+                <input type="submit" id="checkoutBtn" class="d-none"/>
+            </form>
+        </div>
+    </div>
+    <div th:insert="~{plantilla/base :: scripts}"></div>
+    <script>
+        $(document).ready(function () {
+            total = 0.0;
+            $(".productSubtotal").each(function (index, element) {
+                subtotal = parseFloat(element.innerHTML.replace(',','.'));
+                total = total + subtotal;
+            });
+
+            let numFormat = parseFloat(total).toFixed(2);
+            $("#totalAmount").text(numFormat.toString().replace('.',',') + "\u20AC");
+        });
+
+        var mostrarDireccionRadio = document.getElementById('domicilio');
+        var ocultarDireccionRadio = document.getElementById('local');
+        var contenidoDireccion = document.getElementById('contenidoDireccion');
+
+        mostrarDireccionRadio.addEventListener('change', function() {
+             if (mostrarDireccionRadio.checked) {
+                 contenidoDireccion.style.display = 'block';
+             }
+        });
+
+        ocultarDireccionRadio.addEventListener('change', function() {
+             if (ocultarDireccionRadio.checked) {
+                 contenidoDireccion.style.display = 'none';
+             }
+        });
+
+        function check(form) {
+            var total = document.getElementById('totalAmount').innerText;
+            var importeTotal = document.getElementById('importeTotal');
+            importeTotal.value= parseFloat(total.replace(',','.'));
+            return true;
+        }
+
+    </script>
+    <footer th:insert="~{plantilla/base :: pie}"></footer>
+</div>
+</body>
+</html>

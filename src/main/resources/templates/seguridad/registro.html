@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+
+<body>
+<div th:replace="~{plantilla/base :: menu}"></div>
+<br/><br/>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">[[#{registro.correcto}]]</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">[[#{registro.titulo}]]</h2>
+                </div>
+                <div class="card-body">
+                    <form class="form-horizontal" method="post" role="form" th:action="@{/registro/guardar}" th:object="${user}">
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{perfil.nombre}]]</label>
+                            <input class="form-control"
+                                   id="nombre"
+                                   name="nombre"
+                                   th:attr="placeholder=#{registro.nombre.msj}"
+                                   placeholder="Introduce el nombre"
+                                   th:field="*{nombre}"
+                                   type="text"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{nombre}"
+                               th:if="${#fields.hasErrors('nombre')}">
+                            </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{perfil.apellidos}]]</label>
+                            <input class="form-control"
+                                   id="apellidos"
+                                   name="apellidos"
+                                   th:attr="placeholder=#{registro.apellidos.msj}"
+                                   th:field="*{apellidos}"
+                                   type="text"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{apellidos}"
+                               th:if="${#fields.hasErrors('apellidos')}">
+                            </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{perfil.telefono}]]</label>
+                            <input class="form-control"
+                                   id="telefono"
+                                   name="telefono"
+                                   th:attr="placeholder=#{registro.telefono.msj}"
+                                   th:field="*{telefono}"
+                                   type="text"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{telefono}"
+                               th:if="${#fields.hasErrors('telefono')}">
+                            </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{perfil.email}]]</label>
+                            <input class="form-control"
+                                   id="email"
+                                   name="email"
+                                   th:attr="placeholder=#{registro.email.msj}"
+                                   th:field="*{email}"
+                                   type="email"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{email}"
+                               th:if="${#fields.hasErrors('email')}">
+                            </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{registro.password}]]</label><i id="icon1" class="fas fa-eye"></i>
+                            <input class="form-control"
+                                   id="password"
+                                   name="password"
+                                   th:attr="placeholder=#{registro.password.msj}"
+                                   th:field="*{password}"
+                                   type="password"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"> </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">[[#{registro.password2}]]</label><i id="icon2" class="fas fa-eye"></i>
+                            <input class="form-control"
+                                   id="password2"
+                                   name="password2"
+                                   th:attr="placeholder=#{registro.password.msj}"
+                                   placeholder="Repite la contraseña"
+                                   th:field="*{password2}"
+                                   type="password"
+                                   required
+                            />
+                            <p class="text-danger" th:errors="*{password2}" th:if="${#fields.hasErrors('password2')}"> </p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <button class="btn btn-primary" type="submit">[[#{registro.boton.aceptar}]]</button>
+                            <span>[[#{registro.textoLogin}]] <a href="/" th:href="@{/login}">[[#{registro.login}]]</a></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer th:insert="~{plantilla/base :: pie_final}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
+
+<script type="text/javascript">
+    let password = document.getElementById('password');
+    let icon1 = document.getElementById('icon1');
+    icon1.addEventListener('click', () => {
+        password.type =
+            password.type == 'password' ? 'text' : 'password';
+        icon1.className =
+            icon1.className == 'fas fa-eye' ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    let password2 = document.getElementById('password2');
+    let icon2 = document.getElementById('icon2');
+    icon2.addEventListener('click', () => {
+        password2.type =
+            password2.type == 'password' ? 'text' : 'password';
+        icon2.className =
+            icon2.className == 'fas fa-eye' ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+</script>
+
+</body>
+</html>

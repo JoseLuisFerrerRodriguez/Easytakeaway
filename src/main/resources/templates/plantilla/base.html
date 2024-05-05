@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<!-- CABECERA -->
+<head th:fragment="head(titulo, eliminar)" th:remove="${eliminar}">
+    <meta charset="UTF-8">
+    <title>[[${titulo}]]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/logo.ico}"/>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/mdb.css}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+
+<div th:fragment="scripts" xmlns:th="http://www.thymeleaf.org">
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript">
+        contextPath = "[[@{/}]]";
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
+    </script>
+</div>
+
+<!-- MENU -->
+<nav th:fragment="menu" class="navbar sticky-top navbar-expand-lg">
+    <div class="container">
+        <a href="/" class="navbar-brand waves-effect rounded">
+            <img class="img-rounded" th:src="@{/img/logo.jpg}" width="50" height="50">
+        </a>
+        <!--For smartphones menu-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#menu" aria-controls="navbarContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <i class="fas fa-bars" style="color:#fff; font-size:26px;"></i>
+        </button>
+        <!--Left-->
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect rounded" aria-current="page" href="/">[[#{menu.home}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect rounded" href="/categorias">[[#{menu.categorias}]]</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mr-auto ml-auto">
+                <li class="custom_item">
+                    <form class="form-inline" th:action="@{/buscar}" method="get">
+                        <div class="search-box">
+                            <button type="submit" class="btn-search" onclick="this.blur();">
+                                <i class="fas fa-search"></i></button>
+                            <input type="text" name="keyword" class="input-search" placeholder="Escribe para buscar..." required/>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" href="/carrito" class="nav-link waves-effect rounded">
+                        <em class="fa fa-shopping-cart"></em>
+                        <span class="clearfix d-none d-sm-inline-block">[[#{menu.carrito}]]</span>
+                    </a>
+                    <a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+                       data-toggle="modal" href="#ventanaLogin" role="button">
+                        <em class="fa fa-shopping-cart"></em>
+                        <span class="clearfix d-none d-sm-inline-block">[[#{menu.carrito}]]</span>
+                    </a>
+                </li>
+                <!--Profile dropdown-->
+                <li class="nav-item dropdown ml-3" sec:authorize="isAnonymous()">
+                    <a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+                       data-toggle="modal" href="#ventanaLogin" role="button">
+                        <span class="fas fa-user text-white"></span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown ml-3" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light text-white font-weight-bold rounded"
+                       id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"><span class="fas fa-user text-white"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-cyan animated slideIn text-center"
+                         aria-labelledby="navbarDropdownMenuLink-4">
+                        <a class="text-danger dropdown-item waves-effect waves-light rounded" href="/admin"
+                           sec:authorize="hasAnyRole('administrador')">[[#{menu.admin}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/perfil"
+                           sec:authorize="isAuthenticated()">[[#{menu.cuenta}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/pedidos"
+                           sec:authorize="isAuthenticated()">[[#{menu.pedidos}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/logout"
+                           sec:authorize="isAuthenticated()">[[#{menu.logout}]]</a>
+                    </div>
+                </li>
+
+                <div class="language_selector">
+                    <a class="custom_link waves-effect rounded" th:href="@{'?lang=es'}">[[#{menu.leng.españa}]]</a>
+                    <div class="vertical-line" style="height: 25px;"></div>
+                    <a class="custom_link waves-effect rounded" th:href="@{'?lang=en'}">[[#{menu.leng.ingles}]]</a>
+                </div>
+            </ul>
+        </div>
+
+    </div>
+    <div th:replace="~{plantilla/login :: ventanaLogin}"></div>
+</nav>
+
+<!-- Rastro de las categorias -->
+<div th:fragment="rastroCategorias" th:remove="tag">
+    <div th:if="${listaCategoriasRaiz != null && !listaCategoriasRaiz.isEmpty()}">
+        <div class="row">
+            <div class="col">
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/}">[[#{menu.home}]]</a>
+                        </li>
+
+                        <th:block th:each="padre : ${listaCategoriasRaiz}">
+                            <li th:if="${padre.activado}" class="breadcrumb-item">
+                                <a th:href="@{'/categoria/' + ${padre.alias}}">[[${padre.nombre}]]</a>
+                            </li>
+                        </th:block>
+                        <li class="breadcrumb-item" th:if="${producto != null}">
+                            <span>[[${producto.nombreCorto}]]</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="control_cantidad(qtyValue, productId)" class="h-80 d-flex align-items-center justify-content-center" >
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link minusButton" href="" th:pid="${productId}"><b>-</b></a>
+            </li>
+
+            <li class="page-item">
+                <input type="text" th:value="${qtyValue}" class="form-control text-center" onkeydown="return false;" style="min-width:45px; max-width: 55px; max-height: 35px"
+                       th:id="'quantity'+${productId}"/>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link plusButton" href="" th:pid="${productId}"><b>+</b></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- PIE -->
+<footer th:fragment="pie" class="footer text-center text-lg-start mt-5">
+    <div class="container p-4">
+        <div class="row mt-4">
+            <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase font-weight-bolder mb-4">[[#{pie.sobreNosotros}]]</h5>
+                <p><strong>[[#{pie.nombreempresa}]]</strong> [[#{pie.textoNosotros}]]</p>
+                <div class="mt-4">
+                    <button onclick="location.href='https://www.facebook.com/'" type="button"
+                            class="btn btn-circle btn-md">
+                        <em class="fab fa-facebook fa-lg"></em></button>
+                    <button onclick="location.href='https://www.instagram.com/'" type="button"
+                            class="btn btn-circle btn-md">
+                        <em class="fab fa-instagram fa-lg"></em></button>
+                    <button onclick="location.href='https://www.youtube.com/'" type="button"
+                            class="btn btn-circle btn-md">
+                        <em class="fab fa-youtube fa-lg"></em></button>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase font-weight-bolder mb-4 pb-1">[[#{pie.direccion}]]</h5>
+                <ul class="fa-ul" style="margin-left: 1.65em;">
+                    <li class="mb-3">
+                        <span class="fa-li"><em class="fas fa-home"></em></span><span
+                            class="ms-2">[[#{pie.ciudad}]]</span>
+                    </li>
+                    <li class="mb-3">
+                        <span class="fa-li"><em class="fas fa-envelope"></em></span><span
+                            class="ms-2">jlferrer@uoc.edu</span>
+                    </li>
+                    <li class="mb-3">
+                        <span class="fa-li"><em class="fas fa-phone"></em></span><span
+                            class="ms-2">+34666777888</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase font-weight-bolder mb-4">[[#{pie.encuentranos}]]</h5>
+                <iframe class="google_map rounded"
+                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3144.6558020243515!2d-1.1307135292786221!3d37.98516122467971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzfCsDU4JzIyLjkiTiAxwrAxMycwMy43Ilc!5e0!3m2!1sen!2ses!4v1714146975502!5m2!1sen!2ses"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center copyright p-3">
+        <span class="credit">[[#{pie.creado}]] | </span>
+        <span class="far fa-copyright"></span><span> [[#{pie.copyright}]]</span>
+    </div>
+</footer>
+
+
+<div th:fragment="pie_final" class="text-center copyright mt-5 p-4">
+    <hr/>
+    <span class="credit">[[#{pie.creado}]] | </span>
+    <span class="far fa-copyright"></span><span> [[#{pie.copyright}]]</span>
+</div>
