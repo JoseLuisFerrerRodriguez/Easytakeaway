@@ -1,5 +1,6 @@
 package com.proyecto.easytakeaway.servicios.impl;
 
+import com.proyecto.easytakeaway.dto.EstadisticaDTO;
 import com.proyecto.easytakeaway.dto.Paginacion;
 import com.proyecto.easytakeaway.dto.UsuarioDTO;
 import com.proyecto.easytakeaway.excepciones.UsuarioException;
@@ -176,6 +177,28 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         return "OK";
+    }
+
+    @Override
+    public void getEstadistica(EstadisticaDTO estadisticas) {
+
+        Long totalUsuarios = userRepository.count();
+        Long usuariosSinPedidos = userRepository.contarUsuariosSinPedidos();
+        Long usuariosSinConfirmarPedido = userRepository.contarUsuariosSinConfirmarPedido();
+
+        Map<String, Integer> usuariosPermisos = new HashMap<>();
+
+        List<Rol> roles = roleRepository.findAll();
+        for (Rol role : roles) {
+           long total = userRepository.countByRol(role);
+           usuariosPermisos.put(role.getNombre(), ((int) total));
+        }
+
+        estadisticas.setTotalUsuarios(totalUsuarios==null?0:totalUsuarios);
+        estadisticas.setUsuariosSinpedidos(usuariosSinPedidos==null?0:usuariosSinPedidos);
+        estadisticas.setUsuariosSinConfirmarPedido(usuariosSinConfirmarPedido==null?0:usuariosSinConfirmarPedido);
+        estadisticas.setUsuariosPermisos(usuariosPermisos);
+
     }
 
     private String codificarContraseña(String contraseña) {

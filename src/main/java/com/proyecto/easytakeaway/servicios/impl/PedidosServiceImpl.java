@@ -27,9 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -292,6 +290,50 @@ public class PedidosServiceImpl implements PedidosService {
 
     }
 
+    @Override
+    public void getEstadistica(EstadisticaDTO estadistica) {
+
+        Long totalPedidos = repositorio.count();
+        Float ventasTotales = repositorio.sumaVentas();
+        Float ventasLocal = repositorio.sumaVentasLocal();
+        Float ventasRecogida = repositorio.sumaVentasRecogida();
+        Float ventasDomicilio = repositorio.sumaVentasDomicilio();
+        Float pendiente = repositorio.sumaPendienteCobro();
+        List<Object[]> pedidosEstado = repositorio.obtenerTotalPedidosPorEstado();
+        List<Object[]> ventasTotalesMes = repositorio.obtenerVentasTotalesPorMes();
+        List<Object[]> ventasAnuales = repositorio.obtenerVentasTotalesPorAnio();
+
+        Map<String, Double> ventasTotalesMesFormat = new LinkedHashMap<>();
+        String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+        for (String mes : meses) {
+            ventasTotalesMesFormat.put(mes, 0.0);
+        }
+
+        for (Object[] vt : ventasTotalesMes) {
+            ventasTotalesMesFormat.put(meses[(int)vt[0]-1],(double)vt[1]);
+        }
+
+        Map<String, Double> ventasTotalesAnualesFormat = new LinkedHashMap<>();
+        for (Object[] va : ventasAnuales) {
+            ventasTotalesAnualesFormat.put(String.valueOf(va[0]),(double)va[1]);
+        }
+
+        Map<String, Long> pedidosEstadoFormat = new LinkedHashMap<>();
+        for (Object[] p : pedidosEstado) {
+            pedidosEstadoFormat.put(String.valueOf(p[0]),(long)p[1]);
+        }
+
+        estadistica.setTotalPedidos(totalPedidos==null?0:totalPedidos);
+        estadistica.setVentasLocal(ventasLocal==null?0:ventasLocal);
+        estadistica.setVentasRecogida(ventasRecogida==null?0:ventasRecogida);
+        estadistica.setVentasDomicilio(ventasDomicilio==null?0:ventasDomicilio);
+        estadistica.setVentasTotales(ventasTotales==null?0:ventasTotales);
+        estadistica.setTotalPendiente(pendiente==null?0:pendiente);
+        estadistica.setPedidosEstado(pedidosEstadoFormat);
+        estadistica.setVentasMensuales(ventasTotalesMesFormat);
+        estadistica.setVentasAnuales(ventasTotalesAnualesFormat);
+    }
+
 
     private List<PedidoDTO> convertirDTOTodas(List<Pedido> pedidos) {
         List<PedidoDTO> lista = new ArrayList<PedidoDTO>();
@@ -301,6 +343,26 @@ public class PedidosServiceImpl implements PedidosService {
         }
         return lista;
 
+    }
+
+    private String getMes(int mes) {
+
+        switch (mes) {
+            case 1: return "Enero";
+            case 2: return "Febrero";
+            case 3: return "Marzo";
+            case 4: return "Abril";
+            case 5: return "Mayo";
+            case 6: return "Junio";
+            case 7: return "Julio";
+            case 8: return "Agosto";
+            case 9: return "Septiembre";
+            case 10: return "Octubre";
+            case 11: return "Noviembre";
+            case 12: return "Diciembre";
+        }
+
+        return "";
     }
 
 }

@@ -8,6 +8,7 @@ import com.proyecto.easytakeaway.servicios.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -44,16 +46,29 @@ public class AdministracionController {
     private MesaService mesaService;
 
     @GetMapping("")
-    ModelAndView index() {
-        return new ModelAndView("administracion/main");
+    ModelAndView index(Principal principal) {
+        ModelAndView model = new ModelAndView("administracion/main");
+        model.addObject("usuario", principal.getName());
+        return model;
     }
 
+    @PreAuthorize("hasRole('administrador')")
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
+
+        EstadisticaDTO estadistica = new EstadisticaDTO();
+
+        usuarioService.getEstadistica(estadistica);
+        categoriaService.getEstadistica(estadistica);
+        productoService.getEstadistica(estadistica);
+        pedidosService.getEstadistica(estadistica);
+
+        model.addAttribute("datos", estadistica);
         return "administracion/dashboard";
     }
 
     // USUARIOS
+    @PreAuthorize("hasRole('administrador')")
     @GetMapping("/usuarios")
     public String listarUsuariosRegistrados(Model model){
         return listarUsuariosRegistradosPorPagina(1, model);
@@ -67,6 +82,7 @@ public class AdministracionController {
         return "administracion/usuarios/usuario";
     }
 
+    @PreAuthorize("hasRole('administrador')")
     @GetMapping("/usuario/nuevo")
     public String nuevoUsuario(Model model) {
         model.addAttribute("type","crear");
@@ -75,6 +91,7 @@ public class AdministracionController {
         return "administracion/usuarios/formulario_usuario";
     }
 
+    @PreAuthorize("hasRole('administrador')")
     @PostMapping("/usuario/guardar")
     public String crearUsuario(@Valid @ModelAttribute("user") UsuarioDTO usuarioDTO, BindingResult result, Model model, RedirectAttributes redirect) {
 
@@ -109,11 +126,12 @@ public class AdministracionController {
         }
 
         usuarioService.guardarUsuario(usuarioDTO);
-        redirect.addFlashAttribute("message", "El usuario ha sido guardado correctamente");
+        redirect.addFlashAttribute("message", "admin.usuarios.guarda.ok");
 
         return "redirect:/admin/usuarios";
     }
 
+    @PreAuthorize("hasRole('administrador')")
     @GetMapping("/usuario/editar/{id}")
     public String actualizarUsuario(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirect) {
         try {
@@ -122,12 +140,13 @@ public class AdministracionController {
             model.addAttribute("user", usuario);
             model.addAttribute("roles", rolRepository.findAll());
         } catch (UsuarioException e) {
-            redirect.addFlashAttribute("message", e.getMessage());
+            redirect.addFlashAttribute("message", "admin.usuarios.guarda.nook");
             return "redirect:/admin/usuarios";
         }
         return "administracion/usuarios/formulario_usuario";
     }
 
+    @PreAuthorize("hasRole('administrador')")
     @GetMapping("/usuario/borrar/{id}")
     public String borrarUsuario(@PathVariable(name = "id") Integer id, RedirectAttributes redirect) {
         try {
@@ -164,8 +183,8 @@ public class AdministracionController {
     }
 
     @PostMapping("/categoria/guardar")
-    public String guardarCategoria(@Valid @ModelAttribute("categoria") CategoriaDTO categoriaDTO, @RequestParam("imagenCategoria") MultipartFile imagen, BindingResult result,
-                                   Model model, RedirectAttributes attributes) {
+    public String guardarCategoria(@Valid @ModelAttribute("categoria") CategoriaDTO categoriaDTO, BindingResult result, Model model, RedirectAttributes attributes,
+                                   @RequestParam("imagenCategoria") MultipartFile imagen) {
         categoriaDTO.setEsNueva(categoriaDTO.getId() == null?true:false);
 
         if(categoriaDTO.getPadre() != null && categoriaDTO.getPadre().getId() == 0) {
@@ -174,26 +193,26 @@ public class AdministracionController {
 
         if(categoriaDTO.getEsNueva()) {
             if(categoriaService.existeCategoriaPorNombre(categoriaDTO.getNombre()))
-                result.rejectValue("nombre", "admin.categoria.validacion.exiteNombre", "Ya existe una categoria con el nombre");
+                result.rejectValue("nombre", "admin.categoria.validacion.exiteNombre", "Ya existe una categoria con el nombre indicado");
 
             if(categoriaService.existeCategoriaPorAlias( categoriaDTO.getAlias()))
-                result.rejectValue("alias", "admin.categoria.validacion.exiteAlias", "Ya existe una categoria con el alias");
+                result.rejectValue("alias", "admin.categoria.validacion.exiteAlias", "Ya existe una categoria con el alias indicado");
 
         } else {
             try {
                 CategoriaDTO catAnt = categoriaService.getCategoria(categoriaDTO.getId());
                 if(!categoriaDTO.getNombre().equalsIgnoreCase(catAnt.getNombre())) {
                     if(categoriaService.existeCategoriaPorNombre(categoriaDTO.getNombre())) {
-                        result.rejectValue("nombre", "admin.categoria.validacion.exiteNombre", "Ya existe una categoria con el nombre o alias indicado");
+                        result.rejectValue("nombre", "admin.categoria.validacion.exiteNombre", "Ya existe una categoria con el nombre indicado");
                     }
                 }
                 if(!categoriaDTO.getAlias().equalsIgnoreCase(catAnt.getAlias())) {
                     if(categoriaService.existeCategoriaPorAlias( categoriaDTO.getAlias())) {
-                        result.rejectValue("alias", "admin.categoria.validacion.exiteAlias", "Ya existe una categoria con el nombre o alias indicado");
+                        result.rejectValue("alias", "admin.categoria.validacion.exiteAlias", "Ya existe una categoria con el alias indicado");
                     }
                 }
             } catch (CategoriaException e) {
-                result.rejectValue("nombre", "Error al validar la actualización", "Error al validar la actualización");
+                result.rejectValue("nombre", "admin.categoria.actualizar.validarerror", "Ha ocurrido algun error al validar los datos de la actualización ");
             }
         }
 
@@ -281,45 +300,103 @@ public class AdministracionController {
         return "administracion/productos/productos";
     }
 
+    @GetMapping("/producto/nuevo")
+    public String añadirProducto(Model model) {
+        List<CategoriaDTO> categoryList = categoriaService.obtenerTodas();
+        model.addAttribute("producto", new ProductoDTO());
+        model.addAttribute("categorias", categoryList);
+        model.addAttribute("nuevo",true);
+
+        return "administracion/productos/formulario_producto";
+    }
+
+    @PostMapping("/producto/guardar")
+    public String guardarProducto(@Valid @ModelAttribute("producto") ProductoDTO productoDTO, BindingResult result, Model model, RedirectAttributes redirect,
+                                  @RequestParam("imagenProducto") MultipartFile imagen) {
+
+        productoDTO.setEsNueva(productoDTO.getId() == null?true:false);
+
+        if(productoDTO.getEsNueva()) {
+            if(productoService.existeProductoPorNombre(productoDTO.getNombre()))
+                result.rejectValue("nombre", "admin.productos.validacion.exiteNombre", "Ya existe un producto con el nombre indicado");
+
+            if(productoService.existeProductoPorAlias(productoDTO.getAlias()))
+                result.rejectValue("alias", "admin.productos.validacion.exiteAlias", "Ya existe un producto con el alias indicado");
+
+        } else {
+            try {
+                ProductoDTO prodAnt = productoService.getProducto(productoDTO.getId());
+                if(!productoDTO.getNombre().equalsIgnoreCase(prodAnt.getNombre())) {
+                    if(productoService.existeProductoPorNombre(productoDTO.getNombre())) {
+                        result.rejectValue("nombre", "admin.productos.validacion.exiteNombre", "Ya existe un producto con el nombre indicado");
+                    }
+                }
+                if(!productoDTO.getAlias().equalsIgnoreCase(prodAnt.getAlias())) {
+                    if(productoService.existeProductoPorAlias(productoDTO.getAlias())) {
+                        result.rejectValue("alias", "admin.productos.validacion.exiteAlias", "Ya existe un producto con el alias indicado");
+                    }
+                }
+            } catch (ProductoException e) {
+                result.rejectValue("nombre", "admin.producto.actualizar.validarerror", "Ha ocurrido algun error al validar los datos de la actualización ");
+            }
+        }
+
+        if(result.hasErrors()) {
+            List<CategoriaDTO> categorias = categoriaService.obtenerTodas();
+            model.addAttribute("producto", productoDTO);
+            model.addAttribute("categorias", categorias);
+            model.addAttribute("nuevo", productoDTO.getEsNueva());
+            return "administracion/productos/formulario_producto";
+        }
+
+        if(productoDTO.getIva()>=1) {
+            productoDTO.setIva(productoDTO.getIva()/100);
+        }
+
+        try {
+            if(productoDTO.getEsNueva())
+                productoService.guardarProducto(productoDTO, imagen);
+            else
+                productoService.actualizarProducto(productoDTO, imagen);
+        } catch (ProductoException e) {
+            redirect.addFlashAttribute("messageError", e.getMessage());
+        }
+
+        redirect.addFlashAttribute("message", "admin.productos.crear.ok");
+        return "redirect:/admin/productos";
+    }
+
     @GetMapping("/producto/editar/{id}")
     public String actualizarProducto(@PathVariable(name = "id") int id, Model model, RedirectAttributes attributes) {
         try {
             ProductoDTO producto = productoService.getProducto(id);
             List<CategoriaDTO> categorias = categoriaService.obtenerTodas();
-            model.addAttribute("product", producto);
-            model.addAttribute("categoryList", categorias);
+
+            model.addAttribute("nuevo",false);
+            model.addAttribute("producto", producto);
+            model.addAttribute("categorias", categorias);
         } catch (ProductoException e) {
             attributes.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/productos/productos";
+            return "redirect:/admin/productos";
         }
-        return "admin/productos/productos_formulario";
-    }
-
-    @GetMapping("/producto/nuevo")
-    public String añadirProducto(Model model) {
-        List<CategoriaDTO> categoryList = categoriaService.obtenerTodas();
-        model.addAttribute("product", new ProductoDTO());
-        model.addAttribute("categoryList", categoryList);
-
-        return "admin/producto/productos_formulario";
-    }
-
-    @PostMapping("/producto/guardar")
-    public String guardarProducto(ProductoDTO product, RedirectAttributes redirect) {
-        productoService.guardarProducto(product);
-        redirect.addFlashAttribute("message", "The product was saved successfully");
-        return "redirect:/admin/productos/productos";
+        return "administracion/productos/formulario_producto";
     }
 
     @GetMapping("/producto/borrar/{id}")
     public String deleteProduct(@PathVariable(name = "id") Integer id, RedirectAttributes redirect) {
         try {
+            int productos = productoService.contarProductosEnLineas(id);
+
+            if(productos>0) {
+                redirect.addFlashAttribute("messageError", "admin.productos.borrar.uso");
+            }
+
             productoService.borrarProducto(id);
-            redirect.addFlashAttribute("message", "The product ID " + id + " has been deleted successfully");
+            redirect.addFlashAttribute("message", "admin.productos.borrar.ok");
         } catch (ProductoException e) {
             redirect.addFlashAttribute("message", e.getMessage());
         }
-        return "redirect:/admin/productos/productos";
+        return "redirect:/admin/productos";
     }
 
 

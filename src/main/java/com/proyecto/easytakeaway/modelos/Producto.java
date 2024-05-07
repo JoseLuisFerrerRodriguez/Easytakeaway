@@ -33,13 +33,10 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "productoID")
     private Integer id;
 
     @Basic(optional = false)
-    @NotNull
-    @NotBlank
     @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
@@ -52,12 +49,10 @@ public class Producto {
     private String descripcion;
 
     @Basic(optional = false)
-    @NotNull
     @Column(name = "precio")
     private Float precio;
 
     @Basic(optional = false)
-    @NotNull
     @Column(name = "iva")
     private Float iva;
 
@@ -75,6 +70,12 @@ public class Producto {
             return nombre.substring(0, 40).concat("...");
         }
         return nombre;
+    }
+
+    @PrePersist
+    void prePersist() {
+        if (this.imagenURL == null)
+            this.imagenURL = "default.png";
     }
 
     public ProductoDTO convertirModeloaDTO() {

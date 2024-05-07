@@ -432,7 +432,7 @@ div.vertical-line {
 
 .btn-circle.btn:hover {
     color: #fff;
-    background: #f12020;
+    background: #BD8B18;
 }
 
 /*Styles for footer text*/
@@ -685,7 +685,7 @@ svg {
 }
 
 .buttons-con .action-link-wrap a:hover {
-    background: #5A5C6C;
+    background: #BD8B18;
     color: #fff;
 }
 
@@ -794,7 +794,7 @@ svg {
 .modal .modal-body button:hover {
     color: #fff;
     border: 2px solid transparent;
-    background: #f12020;
+    background: #BD8B18;
 }
 
 
@@ -802,7 +802,7 @@ svg {
 .form-group .regButton:hover,
 .modal .modal-body input[type=submit]:hover {
     color: #fff;
-    background: #f12020;
+    background: #BD8B18;
 }
 
 
@@ -816,7 +816,7 @@ svg {
 .custom_buttons:hover {
     color: #fff;
     border: 2px solid transparent;
-    background: #f12020;
+    background: #BD8B18;
 }
 
 /*Prevent modal problems when fade overlaps modal as well

@@ -26,7 +26,7 @@
                     <option th:value="${cat.id}" th:selected="(${categoriaId} == ${cat.id})">[[${cat.nombre}]]</option>
                 </th:block>
             </select>
-
+            <p>&nbsp;</p>
             [[#{admin.productos.filtro}]]
             <input type="search" name="keyword" class="form-control" th:value="${keyword}" required/>
             &nbsp;&nbsp;
@@ -76,6 +76,7 @@
                 <span th:if="${sortField == 'descripcion'}"
                       th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
             </th>
+            <th>[[#{admin.productos.iva}]]</th>
             <th>[[#{admin.productos.precio}]]</th>
             <th class="d-none d-sm-table-cell">
                 <a th:if="${sortField != 'categoria'}" class="text-white"
@@ -100,11 +101,12 @@
                     <a class="link-detail" th:href="@{'/product/'+${product.alias}}"> [[${product.alias}]] </a>
                 </td>
                 <td class="d-none d-sm-table-cell" th:text="${product.descripcion}"></td>
+                <td th:text="${product.iva * 100} + '%'"></td>
                 <td th:text="${product.precio}"></td>
                 <td class="d-none d-sm-table-cell" th:text="${product?.categoria?.nombre}"></td>
                 <td>
-                    <a class="far fa-edit fa-2x green-text" th:href="@{'/admin/productos/editar/' + ${product.id}}" title="Edit this product"></a>
-                    <a class="fas fa-trash-alt fa-2x red-text" th:href="@{'/admin/productos/borrar/' + ${product.id}}" title="Delete this product"></a>
+                    <a class="far fa-edit fa-2x green-text" th:href="@{'/admin/producto/editar/' + ${product.id}}" title="Edit this product"></a>
+                    <a class="fas fa-trash-alt fa-2x red-text" th:href="@{'/admin/producto/borrar/' + ${product.id}}" title="Delete this product"></a>
                 </td>
             </tbody>
         </table>

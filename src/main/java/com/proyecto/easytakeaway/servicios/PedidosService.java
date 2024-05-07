@@ -27,4 +27,6 @@ public interface PedidosService {
 
 
     void cambiarEstado(int id, String estado) throws PedidoErrorException;
+
+    void getEstadistica(EstadisticaDTO estadistica);
 }

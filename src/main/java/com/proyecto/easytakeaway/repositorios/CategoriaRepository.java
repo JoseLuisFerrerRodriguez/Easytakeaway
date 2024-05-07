@@ -20,6 +20,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     public Long countById(Integer id);
 
+    public Long countByActivado(Boolean activado);
+
     @Query("SELECT c FROM Categoria c WHERE c.nombre = :nombre")
     public Categoria buscarPorNombre(@Param("nombre") String nombre);
 
@@ -28,4 +30,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     @Query("SELECT c FROM Categoria c WHERE c.padre.id is NULL")
     public Page<Categoria> buscarCategoriasPadre(Pageable pageable);
+
+    @Query("SELECT c.nombre, COUNT(p) FROM Categoria c JOIN c.productos p GROUP BY c.id")
+    public List<Object[]> contarProductosPorCategoria();
 }

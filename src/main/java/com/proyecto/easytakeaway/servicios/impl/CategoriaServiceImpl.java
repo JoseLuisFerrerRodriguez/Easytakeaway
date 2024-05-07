@@ -2,6 +2,7 @@ package com.proyecto.easytakeaway.servicios.impl;
 
 import com.proyecto.easytakeaway.configuracion.AppConstants;
 import com.proyecto.easytakeaway.dto.CategoriaDTO;
+import com.proyecto.easytakeaway.dto.EstadisticaDTO;
 import com.proyecto.easytakeaway.dto.Paginacion;
 import com.proyecto.easytakeaway.excepciones.AplicationIException;
 import com.proyecto.easytakeaway.modelos.Categoria;
@@ -291,6 +292,28 @@ public class CategoriaServiceImpl implements CategoriaService {
         paginacion.setElementos(listaJerarquicaCategorias(categoriasRaiz));
 
         return paginacion;
+
+    }
+
+    @Override
+    public void getEstadistica(EstadisticaDTO estadistica) {
+
+        long categoriasTotales = repositorio.count();
+        long categoriasActivas = repositorio.countByActivado(true);
+        long categoriasInactivas = repositorio.countByActivado(false);
+        List<Object[]> productosPorCategoria = repositorio.contarProductosPorCategoria();
+
+        Map<String, Long> productosPorCategoriaFormat = new LinkedHashMap<>();
+
+        for (Object[] vt : productosPorCategoria) {
+            productosPorCategoriaFormat.put((String)vt[0],(long)vt[1]);
+        }
+        estadistica.setProductosPorCategorias(productosPorCategoriaFormat);
+
+        estadistica.setTotalCategorias(categoriasTotales);
+        estadistica.setCategoriasActivas(categoriasActivas);
+        estadistica.setCategoriasInactivas(categoriasInactivas);
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.proyecto.easytakeaway.servicios;
 
+import com.proyecto.easytakeaway.dto.EstadisticaDTO;
 import com.proyecto.easytakeaway.dto.Paginacion;
 import com.proyecto.easytakeaway.dto.UsuarioDTO;
 import com.proyecto.easytakeaway.excepciones.UsuarioException;
@@ -25,4 +26,5 @@ public interface UsuarioService {
 
     String existeUsuario(String id, String password);
 
+    void getEstadistica(EstadisticaDTO estadisticas);
 }

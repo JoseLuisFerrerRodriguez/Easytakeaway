@@ -17,15 +17,18 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     public Producto findByAlias(String alias);
 
+    public Producto findByNombre(String nombre);
+
     public Long countById(Integer id);
 
     @Query(nativeQuery=true, value = "SELECT count(productoID) FROM productos WHERE categoriaID = (?1) ")
     public int countByCategoria(Integer id);
 
+    @Query(nativeQuery=true, value = "SELECT count(productoID) FROM lineasPedido WHERE productoID = (?1) ")
+    public int countByProductoEnLineasPedido(Integer id);
+
     @Query(nativeQuery=true, value="SELECT * FROM productos ORDER BY RAND() LIMIT 8")
     public List<Producto> findRandom();
-
-
 
     @Query("SELECT p FROM Producto p "
             + "WHERE (p.categoria.id = ?1 OR p.categoria.todosPadresIDs LIKE %?2%) "
@@ -55,5 +58,15 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
             + "OR p.descripcion LIKE %?3% "
             + "OR p.categoria.nombre LIKE %?3%)")
     public Page<Producto> buscarEnCategoria(Integer categoryId, String categoryIdMatch, String keyword, Pageable pageable);
+
+
+    @Query("SELECT p.nombre FROM Producto p " +
+            "WHERE p.id IN " +
+                "(SELECT lp.producto.id FROM LineaPedido lp " +
+                    "WHERE lp.pedido IS NOT NULL " +
+                    "GROUP BY lp.producto.id " +
+                    "ORDER BY SUM(lp.cantidad) DESC)")
+    List<String> obtenerProductosMasVendidos();
+
 
 }

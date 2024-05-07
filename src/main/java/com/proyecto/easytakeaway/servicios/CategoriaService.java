@@ -1,6 +1,7 @@
 package com.proyecto.easytakeaway.servicios;
 
 import com.proyecto.easytakeaway.dto.CategoriaDTO;
+import com.proyecto.easytakeaway.dto.EstadisticaDTO;
 import com.proyecto.easytakeaway.dto.Paginacion;
 import com.proyecto.easytakeaway.excepciones.CategoriaException;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,4 +33,6 @@ public interface CategoriaService {
     boolean existeCategoriaPorAlias( String alias);
 
     Paginacion<CategoriaDTO> listarPorPagina(int numeroPagina);
+
+    void getEstadistica(EstadisticaDTO estadistica);
 }

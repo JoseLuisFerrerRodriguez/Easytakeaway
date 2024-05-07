@@ -6,9 +6,7 @@ package com.proyecto.easytakeaway.dto;
 
 import com.proyecto.easytakeaway.modelos.Producto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.math.BigDecimal;
 
@@ -27,26 +25,33 @@ public class ProductoDTO {
 
     @NotNull
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 150)
     private String nombre;
 
     private String nombreCorto;
 
     private String alias;
 
-    @Size(max = 255)
     private String descripcion;
 
     @NotNull
+    @Digits(message="{admin.productos.validacion.tiponumero}", fraction = 2, integer = 2)
+    @DecimalMin(value = "0.01", message="{admin.productos.validacion.precio}")
+    @DecimalMax(value="10000", message="{admin.productos.validacion.precio}")
     @Column(name = "precio")
-    private float precio;
+    private Float precio;
 
     @NotNull
-    private float iva;
+    @Digits(message="{admin.productos.validacion.tiponumero}", fraction = 2, integer = 2)
+    @DecimalMin(value = "0.01", message="{admin.productos.validacion.iva}")
+    @DecimalMax(value="99", message="{admin.productos.validacion.iva}")
+    private Float iva;
 
     private String imagenURL;
 
     private CategoriaDTO categoria;
+
+    private Boolean esNueva;
 
     public Producto convertirDTOaModelo() {
         Producto producto = new Producto();

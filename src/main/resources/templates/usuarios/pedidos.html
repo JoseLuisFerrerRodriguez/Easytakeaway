@@ -22,15 +22,15 @@
                 <h2 class="border-light">[[#{pedidos.titulo}]]</h2>
                 <table id="tableA" class="table table-striped text-center">
                     <thead>
-                    <tr>
-                        <th scope="col">[[#{pedidos.numero}]]</th>
-                        <th scope="col">[[#{pedidos.fecha}]]</th>
-                        <th scope="col">[[#{pedidos.productos}]]</th>
-                        <th scope="col">[[#{pedidos.estado.pedido}]]</th>
-                        <th scope="col">[[#{pedidos.tipoenvio}]]</th>
-                        <th scope="col">[[#{pedidos.total}]]</th>
-                        <th scope="col">[[#{pedidos.ticket}]]</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">[[#{pedidos.numero}]]</th>
+                            <th scope="col">[[#{pedidos.fecha}]]</th>
+                            <th scope="col">[[#{pedidos.productos}]]</th>
+                            <th scope="col">[[#{pedidos.estado.pedido}]]</th>
+                            <th scope="col">[[#{pedidos.tipoenvio}]]</th>
+                            <th scope="col">[[#{pedidos.total}]]</th>
+                            <th scope="col">[[#{pedidos.ticket}]]</th>
+                        </tr>
                     </thead>
                     <tbody>
                     <tr th:each="pedido : ${pedidos}">

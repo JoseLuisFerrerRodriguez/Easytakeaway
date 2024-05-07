@@ -8,14 +8,18 @@
 <div th:replace="~{plantilla/baseAdmin :: menu}"></div>
 
 <div class="container">
+    <br>
 
-    <h1>Bienvenido</h1>
+    <h1>Apartado de gestión</h1>
+
+    <h3>Usuario:  <span th:text="${usuario}"></span></h3>
 
     <div th:if="${msgExito != null}" class="alert alert-success alert-dismissible mt-3">
         [[${msgExito}]]
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    <p>Contenido principal</p>
+    <p>En esta vista dispones de todo los apartados para administrar y gestionar el portal.</p>
+    <p>Presta atención en la gestión de pedidos</p>
 
 </div>
 
