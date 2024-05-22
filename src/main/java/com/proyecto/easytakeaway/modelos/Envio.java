@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 @ToString
 @Entity
-@Table(name = "envios")
+@Table(name = "Envios")
 public class Envio {
 
     @Id
