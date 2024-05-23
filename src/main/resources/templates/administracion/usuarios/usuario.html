@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
 <body>
 
-<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div th:replace="~{plantilla/baseAdmin :: menu}"></div>
 
 <div class="container-fluid">
     <div>
@@ -46,11 +46,11 @@
         </table>
     </div>
     <!--Pagination-->
-    <div th:replace="~{/plantilla/paginacion :: paginacion('/admin/usuarios')}"></div>
+    <div th:replace="~{plantilla/paginacion :: paginacion('/admin/usuarios')}"></div>
 </div>
 
-<footer th:insert="~{/plantilla/base :: pie_final}"></footer>
-<div th:insert="~{/plantilla/base :: scripts}"></div>
+<footer th:insert="~{plantilla/base :: pie_final}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
 
 </body>
 </html>

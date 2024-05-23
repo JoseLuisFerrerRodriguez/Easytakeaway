@@ -30,7 +30,7 @@ public class UsuarioController {
         if (principal != null) {
             UsuarioDTO usuario = usuarioService.findByUsuario(principal.getName());
             model.addAttribute("usuario", usuario);
-            return "/usuarios/perfil";
+            return "usuarios/perfil";
         } else {
             model.addAttribute("errorMessage", new NotFoundException("No se ha encontrado el usuario"));
             return "error";
@@ -41,7 +41,7 @@ public class UsuarioController {
     public String editarPerfilUsuario(Principal principal, Model model) {
         UsuarioDTO usuario = usuarioService.findByUsuario(principal.getName());
         model.addAttribute("usuario", usuario);
-        return "/usuarios/perfil_editar";
+        return "usuarios/perfil_editar";
     }
 
     @PostMapping("/guardar")
@@ -50,7 +50,7 @@ public class UsuarioController {
 
         if (result.hasErrors()) {
             model.addAttribute("usuario", usuarioDTO);
-            return "/usuarios/perfil_editar";
+            return "usuarios/perfil_editar";
         }
 
         anterior.setPassword(usuarioDTO.getPassword());

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+    <head th:replace="~{plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
     <link rel="stylesheet" th:href="@{/css/richtext.min.css}"/>
 </head>
-<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div th:replace="~{plantilla/baseAdmin :: menu}"></div>
 <body>
 <div class="container-fluid">
     <div>
@@ -89,9 +89,9 @@
         </div>
     </form>
 </div>
-<footer th:insert="~{/plantilla/base :: pie_final}"></footer>
+<footer th:insert="~{plantilla/base :: pie_final}"></footer>
 
-<div th:insert="~{/plantilla/base :: scripts}"></div>
+<div th:insert="~{plantilla/base :: scripts}"></div>
 <script th:src="@{/js/jquery.richtext.min.js}"></script>
 <script type="text/javascript">
     $(document).ready(function () {

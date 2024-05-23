@@ -1,4 +1,10 @@
-CREATE DATABASE easytakeawaybbdd;
+CREATE DATABASE easytakeawaybbdd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET character_set_connection=utf8mb4;
+SET character_set_server=utf8mb4;
+SET character_set_client=utf8mb4;
 
 CREATE USER 'AdminEasyTakeAway'@'%' IDENTIFIED BY 'A$19eta!';
 GRANT ALL PRIVILEGES ON easytakeawaybbdd.* TO 'AdminEasyTakeAway'@'%';
@@ -22,7 +28,7 @@ DROP TABLE IF EXISTS roles;
 CREATE TABLE roles (
     rolID INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE usuarios (
     usuarioID INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,7 +36,7 @@ CREATE TABLE usuarios (
     password CHAR(64) NOT NULL,
     rolID INT NOT NULL,
     CONSTRAINT fk_rol_usuario FOREIGN KEY (rolID) REFERENCES roles(rolID)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;;
 
 CREATE TABLE usuariosinfo (
 	usuarioID INT PRIMARY KEY,
@@ -45,7 +51,7 @@ CREATE TABLE usuariosinfo (
 	telefono VARCHAR(15),
 	email VARCHAR(100),
 	CONSTRAINT fk_usuario FOREIGN KEY (usuarioID) REFERENCES usuarios(usuarioID)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE categorias (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -57,7 +63,7 @@ CREATE TABLE categorias (
    padre_id INT,
    todos_padres_ids VARCHAR(250),
    CONSTRAINT fk_padre_categoria FOREIGN KEY (padre_id) REFERENCES categorias(id)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX nombre_UNIQUE ON categorias (nombre ASC) VISIBLE;
 CREATE INDEX fk_category_category1_idx ON categorias (padre_id ASC) VISIBLE;
@@ -73,7 +79,7 @@ CREATE TABLE productos (
 	imagen VARCHAR(255) DEFAULT 'default.png',
 	categoriaID INT NOT NULL,
 	CONSTRAINT fk_categoria FOREIGN KEY (categoriaID) REFERENCES categorias(id)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE INDEX fk_product_category1_idx ON productos (categoriaID ASC) VISIBLE;
 CREATE FULLTEXT INDEX productos_FTS ON productos (nombre, descripcion) VISIBLE;
@@ -84,7 +90,7 @@ CREATE TABLE mesas (
    capacidad INT NOT NULL,
    posicion VARCHAR(250),
    imagenqr VARCHAR(255)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE pedidos (
    pedidoID INT AUTO_INCREMENT PRIMARY KEY,
@@ -98,7 +104,7 @@ CREATE TABLE pedidos (
    mesaID INT,
    CONSTRAINT fk_usuarioPedido FOREIGN KEY (usuarioID) REFERENCES usuarios(usuarioID),
    CONSTRAINT fk_mesa FOREIGN KEY (mesaID) REFERENCES mesas(mesaID)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE envios (
 	pedidoId INT PRIMARY KEY NOT NULL,
@@ -107,7 +113,7 @@ CREATE TABLE envios (
 	codigoPostal VARCHAR(5),
 	estado ENUM('Pendiente', 'Cancelado', 'Enviado', 'Espera', 'Entregado') NOT NULL DEFAULT 'Pendiente',
     CONSTRAINT fk_entregas_pedido FOREIGN KEY (pedidoId) REFERENCES pedidos (pedidoId)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE lineaspedido (
 	lineaPedidoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -121,7 +127,7 @@ CREATE TABLE lineaspedido (
     CONSTRAINT fk_pedido FOREIGN KEY (pedidoID) REFERENCES pedidos(pedidoID),
 	CONSTRAINT fk_usuarioLineaPedido FOREIGN KEY (usuarioID) REFERENCES usuarios(UsuarioID),
     CONSTRAINT fk_productoLineaPedido FOREIGN KEY (productoID) REFERENCES productos(ProductoID)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- INSERT INICIALES
 INSERT INTO roles(Nombre) VALUES ("usuario");

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
 <body>
-<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div th:replace="~{plantilla/baseAdmin :: menu}"></div>
 <div class="container-fluid">
     <div>
         <h2 class="mt-3 text-center" th:if="${type == 'crear'}">[[#{admin.usuarios.titulo.crear}]]</h2>
@@ -83,10 +83,10 @@
             </div>
         </div>
     </form>
-    <footer th:insert="~{/plantilla/base :: pie_final}"></footer>
+    <footer th:insert="~{plantilla/base :: pie_final}"></footer>
 </div>
 
-<div th:insert="~{/plantilla/base :: scripts}"></div>
+<div th:insert="~{plantilla/base :: scripts}"></div>
 
 <script type="text/javascript">
     $(document).ready(function () {

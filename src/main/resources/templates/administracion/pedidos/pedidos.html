@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{/plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}+' - Gestión', 'none')}"></head>
 
 <body>
-<div th:replace="~{/plantilla/baseAdmin :: menu}"></div>
+<div th:replace="~{plantilla/baseAdmin :: menu}"></div>
 <div class="container-fluid">
     <div>
         <h2 class="mt-3 text-center">[[#{admin.pedidos.titulo}]]</h2>
@@ -159,9 +159,9 @@
             </tbody>
         </table>
     </div>
-    <div th:replace="~{/plantilla/paginacion :: paginacion('/admin/pedidos')}"></div>
+    <div th:replace="~{plantilla/paginacion :: paginacion('/admin/pedidos')}"></div>
 </div>
-<footer th:insert="~{/plantilla/base :: pie_final}"></footer>
-<div th:insert="~{/plantilla/base :: scripts}"></div>
+<footer th:insert="~{plantilla/base :: pie_final}"></footer>
+<div th:insert="~{plantilla/base :: scripts}"></div>
 </body>
 </html>

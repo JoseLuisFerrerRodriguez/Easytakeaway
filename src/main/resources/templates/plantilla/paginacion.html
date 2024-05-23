@@ -18,20 +18,20 @@
          <nav>
              <ul class="pagination justify-content-center flex-wrap">
                  <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, 1, #{paginacion.primero})}"></a>
+                     <a th:replace="~{plantilla/paginacion :: page_link(${url}, 1, #{paginacion.primero})}"></a>
                  </li>
                  <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
+                     <a th:replace="~{plantilla/paginacion :: page_link(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
                  </li>
                  <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                      th:each="i : ${#numbers.sequence(1, totalPages)}">
-                     <a th:replace="~{/plantilla/paginacion :: page_link(${url},${i}, ${i})}"></a>
+                     <a th:replace="~{plantilla/paginacion :: page_link(${url},${i}, ${i})}"></a>
                  </li>
                  <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
+                     <a th:replace="~{plantilla/paginacion :: page_link(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
                  </li>
                  <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                     <a th:replace="~{/plantilla/paginacion :: page_link(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
+                     <a th:replace="~{plantilla/paginacion :: page_link(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
                  </li>
              </ul>
          </nav>
@@ -59,20 +59,20 @@
         <nav>
             <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, 1, #{paginacion.primero})}"></a>
+                    <a th:replace="~{plantilla/paginacion :: linkProductos(${url}, 1, #{paginacion.primero})}"></a>
                 </li>
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
+                    <a th:replace="~{plantilla/paginacion :: linkProductos(${url}, ${currentPage - 1}, #{paginacion.previo})}"></a>
                 </li>
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                     th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url},${i}, ${i})}"></a>
+                    <a th:replace="~{plantilla/paginacion :: linkProductos(${url},${i}, ${i})}"></a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
+                    <a th:replace="~{plantilla/paginacion :: linkProductos(${url}, ${currentPage + 1}, #{paginacion.siguiente})}"></a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{/plantilla/paginacion :: linkProductos(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
+                    <a th:replace="~{plantilla/paginacion :: linkProductos(${url}, ${totalPages}, #{paginacion.ultimo})}"></a>
                 </li>
             </ul>
         </nav>
