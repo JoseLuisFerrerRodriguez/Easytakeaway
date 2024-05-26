@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
 
 <a th:fragment="page_link(moduleURL, pageNum, label)"  class="page-link"  th:href="@{${moduleURL} + '/page/' + ${pageNum}}">
     [[${label}]]

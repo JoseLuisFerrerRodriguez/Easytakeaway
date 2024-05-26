@@ -78,7 +78,7 @@ public class PedidosController {
             model.addAttribute("errorMessage", new NotFoundException("No se han encontrado pedidos"));
             return "error";
         }
-        return "/usuarios/pedidos";
+        return "usuarios/pedidos";
     }
 
     @GetMapping("/procesar")
@@ -107,7 +107,7 @@ public class PedidosController {
             model.addAttribute("errorMessage", new NotFoundException("No se han encontrado las lineas del pedido"));
             return "error";
         }
-        return "/usuarios/procesarPedido";
+        return "usuarios/procesarPedido";
     }
 
     @PostMapping("/procesar")
@@ -123,7 +123,7 @@ public class PedidosController {
             model.addAttribute("pedido", nuevoPedido);
             model.addAttribute("usuario", usuario);
             model.addAttribute("lineasPedido", lineasPedido);
-            return "/usuarios/procesarPedido";
+            return "usuarios/procesarPedido";
         }
 
         // Guardar el pedido
@@ -134,7 +134,7 @@ public class PedidosController {
             model.addAttribute("pedido", nuevoPedido);
             model.addAttribute("usuario", usuario);
             model.addAttribute("lineasPedido", lineasPedido);
-            return "/usuarios/procesarPedido";
+            return "usuarios/procesarPedido";
         }
 
         // Enviar email de confirmacion
