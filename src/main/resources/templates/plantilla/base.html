@@ -61,7 +61,7 @@
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons">
                 <li class="nav-item">
-                    <a sec:authorize="isAuthenticated()" href="/carrito" class="nav-link waves-effect rounded">
+                    <a sec:authorize="isAuthenticated()" id="carritoAccess" href="/carrito" class="nav-link waves-effect rounded">
                         <em class="fa fa-shopping-cart"></em>
                         <span class="clearfix d-none d-sm-inline-block">[[#{menu.carrito}]]</span>
                     </a>

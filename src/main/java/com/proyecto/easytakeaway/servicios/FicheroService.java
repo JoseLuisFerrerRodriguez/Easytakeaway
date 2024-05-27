@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public interface FicheroService {
 
-    void generarQR(String datosQR, String path, String extension);
+    void generarQR(String datosQR, String path, String nombrefichero, String extension);
 
     String guardarImagen(String path, MultipartFile file, String nombre) throws IOException;
 

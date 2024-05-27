@@ -31,7 +31,7 @@
                 <td th:text="${mesa.numeroMesa}"></td>
                 <td th:text="${mesa.capacidad}"></td>
                 <td th:text="${mesa.posicion}"></td>
-                <td><img class="img-fluid mx-auto d-block image" width="75" height="75" th:src="'/img/mesas/'+${mesa.imagenQR}"/></td>
+                <td><img class="img-fluid mx-auto d-block image" width="75" height="75" th:src="'/content/private/qr_mesas/'+${mesa.imagenQR}"/></td>
                 <td>
                     <a class="far fa-edit fa-2x green-text"  th:href="@{'/admin/mesa/editar/' + ${mesa.id}}" title="Editar esta mesa"></a>
                     <a class="fas fa-trash-alt fa-2x red-text" th:href="@{'/admin/mesa/borrar/' + ${mesa.id}}" title="Borrar esta mesa"></a>

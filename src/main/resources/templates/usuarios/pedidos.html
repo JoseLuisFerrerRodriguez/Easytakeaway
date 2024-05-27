@@ -37,7 +37,7 @@
                         <td th:text="${pedido?.id}"></td>
                         <td th:text="${#dates.format(pedido?.fecha,'dd/MM/yyyy')}"></td>
                         <td><a class="fas fa-id-card" data-toggle="modal" th:href="'#datosProductos' + ${pedido?.id}" role="button"></a></td>
-                        <div th:replace="~{/usuarios/ventanasDatos :: ventanaDatosProductos(${pedido?.id})}"></div>
+                        <div th:replace="~{usuarios/ventanasDatos :: ventanaDatosProductos(${pedido?.id})}"></div>
                         <td th:text="${pedido?.estado}"></td>
                         <div th:if="${pedido?.tipoEnvio} eq '0'">
                             <td>[[#{pedidos.envio.local}]]</td>
@@ -45,7 +45,7 @@
                         <div th:unless="${pedido.tipoEnvio} eq '0'">
                             <td>[[#{pedidos.envio.domicilio}]]
                                 <a class="fas fa-search-location" data-toggle="modal" th:href="'#datosEnvio' + ${pedido?.id}" role="button"></a>
-                                <div th:replace="~{/usuarios/ventanasDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
+                                <div th:replace="~{usuarios/ventanasDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
                             </td>
                         </div>
                         <td>[[${pedido.importeTotal}]] &#8364;</td>
