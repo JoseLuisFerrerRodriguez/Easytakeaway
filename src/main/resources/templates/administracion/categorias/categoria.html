@@ -30,7 +30,7 @@
             <tbody>
             <tr th:each="categoria : ${categorias}">
                 <td th:text="${categoria.id}"></td>
-                <td><img class="img-fluid mx-auto d-block image" th:src="'/img/categorias/'+${categoria.imagenURL}" width="50" height="50"></td>
+                <td><img class="img-fluid mx-auto d-block image" th:src="'/content/img/categorias/'+${categoria.imagenURL}" width="50" height="50"></td>
                 <td th:text="${categoria.padre?.nombre}"></td>
                 <td th:text="${categoria.nombre}"></td>
                 <td th:text="${categoria.alias}"></td>

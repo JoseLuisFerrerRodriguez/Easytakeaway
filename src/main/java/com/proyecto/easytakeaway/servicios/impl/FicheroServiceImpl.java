@@ -28,8 +28,10 @@ public class FicheroServiceImpl implements FicheroService {
 
 
     @Override
-    public void generarQR(String datosQR, String path, String extension) {
-        QRGenerator.generarQR(datosQR, path, extension);
+    public void generarQR(String datosQR, String path, String nombreFichero, String extension) {
+        existeCarpetaoCrear(path);
+        String rutacompleta = path + File.separator + nombreFichero;
+        QRGenerator.generarQR(datosQR, rutacompleta, extension);
     }
 
     @Override
@@ -47,11 +49,7 @@ public class FicheroServiceImpl implements FicheroService {
 
         String filePath = path + File.separator + nombreFichero;
 
-        File folder = new File(path);
-        if(!folder.exists()) {
-            folder.mkdir();
-        }
-
+        existeCarpetaoCrear(path);
         Files.copy(file.getInputStream(), Paths.get(filePath));
 
         return nombreFichero;
@@ -90,12 +88,13 @@ public class FicheroServiceImpl implements FicheroService {
         return ext[ext.length-1];
     }
 
-
     @Override
     public void generarTicketPDF(String path, String nombreFichero, Pedido pedido) {
 
         PdfWriter writer = null;
         Document documento = new Document(PageSize.A4, 20, 20, 70, 50);
+
+        existeCarpetaoCrear(path);
 
         try {
             writer = PdfWriter.getInstance(documento, new FileOutputStream(path + File.separator + nombreFichero + ".pdf"));
@@ -222,6 +221,21 @@ public class FicheroServiceImpl implements FicheroService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void existeCarpetaoCrear(String path) {
+
+        File file = new File(path);
+
+        if(!file.exists()) {
+            log.info("La ruta " + path + " no existe");
+            boolean result = file.mkdirs();
+            log.info("Resultado de crear el directorio " + result);
+
+            file.setReadable(true, false);
+            file.setWritable(true, false);
+            file.setExecutable(true, false);
         }
     }
 

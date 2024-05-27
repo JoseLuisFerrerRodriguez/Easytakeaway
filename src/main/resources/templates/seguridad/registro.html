@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <div th:if="${param.success}">
+            <div id="registroOk" th:if="${param.success}">
                 <div class="alert alert-info">[[#{registro.correcto}]]</div>
             </div>
             <div class="card">
@@ -29,7 +29,7 @@
                                    type="text"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{nombre}"
+                            <p id="errorNombre" class="text-danger" th:errors="*{nombre}"
                                th:if="${#fields.hasErrors('nombre')}">
                             </p>
                         </div>
@@ -43,7 +43,7 @@
                                    type="text"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{apellidos}"
+                            <p id="errorApellidos" class="text-danger" th:errors="*{apellidos}"
                                th:if="${#fields.hasErrors('apellidos')}">
                             </p>
                         </div>
@@ -57,7 +57,7 @@
                                    type="text"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{telefono}"
+                            <p id="errorTelefono" class="text-danger" th:errors="*{telefono}"
                                th:if="${#fields.hasErrors('telefono')}">
                             </p>
                         </div>
@@ -71,7 +71,7 @@
                                    type="email"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{email}"
+                            <p id="errorEmail" class="text-danger" th:errors="*{email}"
                                th:if="${#fields.hasErrors('email')}">
                             </p>
                         </div>
@@ -85,7 +85,7 @@
                                    type="password"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"> </p>
+                            <p id="errorPassword" class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"> </p>
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label">[[#{registro.password2}]]</label><i id="icon2" class="fas fa-eye"></i>
@@ -98,10 +98,10 @@
                                    type="password"
                                    required
                             />
-                            <p class="text-danger" th:errors="*{password2}" th:if="${#fields.hasErrors('password2')}"> </p>
+                            <p id="errorPassword2" class="text-danger" th:errors="*{password2}" th:if="${#fields.hasErrors('password2')}"> </p>
                         </div>
                         <div class="form-group mb-3">
-                            <button class="btn custom_buttons rounded" type="submit">[[#{registro.boton.aceptar}]]</button>
+                            <button id="submit" class="btn custom_buttons rounded" type="submit">[[#{registro.boton.aceptar}]]</button>
                             <span>[[#{registro.textoLogin}]] <a href="/" th:href="@{/login}">[[#{registro.login}]]</a></span>
                         </div>
                     </form>

@@ -152,7 +152,7 @@ public class AdministracionController {
         try {
             usuarioService.borrarUsuario(id);
             redirect.addFlashAttribute("message",
-                    "El usuario con ID " + id + " ha sido borrado correctamente");
+                    "admin.usuarios.borrar.ok");
         } catch (UsuarioException e) {
             redirect.addFlashAttribute("messageError", e.getMessage());
         }
@@ -572,7 +572,7 @@ public class AdministracionController {
     public String borrarMesa(@PathVariable(name = "id") Integer id, RedirectAttributes redirect){
         try {
             mesaService.borrarMesa(id);
-            redirect.addFlashAttribute("message", "EL mesa con ID " + id + " ha sido borrada correctamente");
+            redirect.addFlashAttribute("message", "admin.mesas.borrar.ok");
         } catch (MesaException e) {
             redirect.addFlashAttribute("message", e.getMessage());
         }

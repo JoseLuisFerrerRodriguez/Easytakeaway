@@ -151,7 +151,7 @@ INSERT INTO categorias (nombre, alias, descripcion, imagen, activado, padre_id, 
 
 INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Hamburguesa Clásica', 'Classic Burger', 'Deliciosa hamburguesa con carne de res, lechuga, tomate y queso cheddar', 5.99, 0.10, '1.png',  6);
 INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Hamburguesa BBQ', 'BBQ Burger', 'Hamburguesa con salsa BBQ, cebolla caramelizada y queso americano', 6.99, 0.10, '2.png', 6);
-INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Hamburguesa Doble Queso', 'Double Cheeseburger', 'Doble carne de res con doble queso cheddar fundido', 7.49, 0.10, '3.png', 6);
+INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Doble de Queso', 'Double Cheeseburger', 'Doble carne de vacuno con doble queso cheddar fundido', 7.49, 0.10, '3.png', 6);
 INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Pizza Margarita', 'Margarita', 'Pizza con salsa de tomate, mozzarella fresca y albahaca', 8.99, 0.10, '4.png', 7);
 INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Pizza Pepperoni', 'Pepperoni', 'Pizza con salsa de tomate, mozzarella y pepperoni', 9.99, 0.10, '5.png', 7);
 INSERT INTO productos (nombre, alias, descripcion, precio, iva, imagen, categoriaID) VALUES ('Pizza Hawaiana', 'Hawaiana', 'Pizza con salsa de tomate, mozzarella, jamón y piña', 10.49, 0.10, '6.png', 7);

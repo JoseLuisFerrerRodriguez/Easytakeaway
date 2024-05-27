@@ -33,7 +33,7 @@ public class CarritoServiceImpl implements CarritoService {
 
         Producto producto = productoRepository.getReferenceById(productoId);
 
-        LineaPedido lineaPedido = carritoRepository.buscarLineasPorUsuarioYProducto(usuarioModelo.getUsuarioID(), producto.getId());
+        LineaPedido lineaPedido = carritoRepository.buscarLineasPorUsuarioYProducto(producto.getId(), usuarioModelo.getUsuarioID());
 
         if (lineaPedido != null) {
             cantidadAñadir = lineaPedido.getCantidad() + cantidad;

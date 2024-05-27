@@ -1,6 +1,5 @@
 package com.proyecto.easytakeaway.servicios;
 
-
 import com.proyecto.easytakeaway.dto.UsuarioDTO;
 
 public interface CarritoService {

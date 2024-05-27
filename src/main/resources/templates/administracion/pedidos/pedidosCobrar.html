@@ -131,10 +131,10 @@
             <tr th:each="pedido : ${pedidos}">
                 <td th:text="${pedido?.id}"></td>
                 <td style="text-align:left"><a class="fas fa-id-card" data-toggle="modal" th:href="'#datosCliente' + ${pedido?.id}" role="button"></a>&nbsp;[[${pedido?.nombre}]]</td>
-                <div th:replace="~{/administracion/pedidos/ventanasDatos :: ventanaDatosCliente(${pedido?.id})}"></div>
+                <div th:replace="~{administracion/pedidos/ventanasDatos :: ventanaDatosCliente(${pedido?.id})}"></div>
                 <td th:text="${#dates.format(pedido?.fecha,'dd/MM/yyyy HH:mm:ss')}"></td>
                 <td><a class="fas fa-utensils" data-toggle="modal" th:href="'#datosProductos' + ${pedido?.id}" role="button"></a></td>
-                <div th:replace="~{/administracion/pedidos/ventanasDatos :: ventanaDatosLineas(${pedido?.id})}"></div>
+                <div th:replace="~{administracion/pedidos/ventanasDatos :: ventanaDatosLineas(${pedido?.id})}"></div>
                 <td th:text="${pedido?.estado}"></td>
                 <td th:text="${pedido?.mesa?.numeroMesa}"></td>
                 <div th:if="${pedido?.tipoEnvio} eq '0'">
@@ -145,7 +145,7 @@
                         <a data-toggle="modal" th:href="'#datosEnvio' + ${pedido?.id}" role="button">
                             <i class="fas fa-search-location"></i>
                         </a>
-                        <div th:replace="~{/administracion/pedidos/ventanaDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
+                        <div th:replace="~{administracion/pedidos/ventanaDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
                     </td>
                 </div>
                 <td th:text="${pedido?.estadoEnvio}"></td>
