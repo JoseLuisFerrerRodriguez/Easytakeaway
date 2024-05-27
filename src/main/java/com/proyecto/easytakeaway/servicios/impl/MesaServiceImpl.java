@@ -99,10 +99,10 @@ public class MesaServiceImpl implements MesaService {
         String value = seguridadService.codificarTexto(mesaDTO.getNumeroMesa().toString());
 
         String datosQR = url + value;
-        String path = AppConstants.URL_IMAGENES_MESAS_QR + mesaDTO.getNumeroMesa();
-        String extension = "png";
-        ficheroService.generarQR(datosQR, path, "png");
-        mesaDTO.setImagenQR("qr"+mesaDTO.getNumeroMesa()+".png");
+        String nombreFichero = "qr" + mesaDTO.getNumeroMesa();
+        String extension ="png";
+        ficheroService.generarQR(datosQR, AppConstants.URL_IMAGENES_MESAS_QR, nombreFichero, extension);
+        mesaDTO.setImagenQR(nombreFichero + "." + extension);
 
         Mesa mesa = mesaDTO.convertirDTOaModelo();
         mesaRepository.save(mesa);

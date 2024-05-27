@@ -95,7 +95,7 @@
             <tbody>
             <tr th:each="product : ${productos}">
                 <td class="d-none d-sm-table-cell" th:text="${product.id}"></td>
-                <td><img class="img-fluid mx-auto d-block image" width="75" height="75" th:src="'/img/productos/'+${product.imagenURL}"/></td>
+                <td><img class="img-fluid mx-auto d-block image" width="75" height="75" th:src="'/content/img/productos/'+${product.imagenURL}"/></td>
                 <td th:title="${product.nombre}" th:text="${product.nombre}"></td>
                 <td class="d-none d-sm-table-cell" th:title="${product.alias}">
                     <a class="link-detail" th:href="@{'/product/'+${product.alias}}"> [[${product.alias}]] </a>
