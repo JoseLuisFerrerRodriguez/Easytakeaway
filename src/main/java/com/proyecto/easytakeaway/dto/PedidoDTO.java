@@ -49,7 +49,7 @@ public class PedidoDTO {
     private List<LineaPedidoDTO> lineasPedido;
 
     // Mesa
-    private Mesa mesa;
+    private MesaDTO mesa;
 
     public Pedido convertirDTOaModelo() {
         Pedido pedido = new Pedido();
@@ -67,6 +67,14 @@ public class PedidoDTO {
         envio.setDireccion(this.getDireccion());
         envio.setCiudad(this.getCiudad());
         envio.setCodigoPostal(this.getCodigoPostal());
+
+        if(mesa != null) {
+            Mesa mesa = new Mesa();
+            mesa.setId(this.getMesa().getId());
+            mesa.setNumeroMesa(this.getMesa().getNumeroMesa());
+            mesa.setCapacidad(this.getMesa().getCapacidad());
+            pedido.setMesaID(mesa);
+        }
 
         pedido.setEnvio(envio);
 

@@ -11,4 +11,6 @@ public interface SeguridadService {
     boolean comprobarLogin();
 
     String codificarTexto(String texto);
+
+    public String decodificarText(String textocifrado);
 }

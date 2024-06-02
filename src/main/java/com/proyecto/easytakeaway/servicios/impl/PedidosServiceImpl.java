@@ -161,7 +161,7 @@ public class PedidosServiceImpl implements PedidosService {
         pedido.setFecha(new Timestamp(fechaActual.getTime()));
 
         // Establecer el tipo de pedido según en el envio
-        if(nuevoPedido.getTipoEnvio() == 0 ) {
+        if(nuevoPedido.getTipoEnvio() == 0 || nuevoPedido.getTipoEnvio() == 3) {
             pedido.setEnvio(null);
         } else {
             pedido.getEnvio().setEstado(EstadoEnvio.Pendiente);

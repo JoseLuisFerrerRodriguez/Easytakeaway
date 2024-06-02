@@ -5,6 +5,7 @@ import com.proyecto.easytakeaway.modelos.Usuario;
 import com.proyecto.easytakeaway.repositorios.UsuarioRepository;
 import com.proyecto.easytakeaway.servicios.SeguridadService;
 import lombok.extern.slf4j.Slf4j;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,9 @@ public class SeguridadServiceImpl implements SeguridadService, UserDetailsServic
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    private static final String PASSWORD = "descifrado";
+    private static final String ALGORITHM = "PBEWithMD5AndDES";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -89,8 +94,24 @@ public class SeguridadServiceImpl implements SeguridadService, UserDetailsServic
     }
 
     @Override
-    public String codificarTexto(String texto) {
-        return passwordEncoder.encode(texto);
+    public String codificarTexto(String textoPlano) {
+        String base64Encoded = Base64.getEncoder().encodeToString(textoPlano.getBytes());
+
+        // Es necesario quitar los caracteres /, + e = para evitar cualquier problema si va en una URL
+        String textoCodificado = base64Encoded.replace("+", "-")
+                                             .replace("/", "_")
+                                             .replace("=", ",");
+        return textoCodificado;
+    }
+
+    public String decodificarText(String textoCodificado) {
+        String base64Encoded = textoCodificado.replace("-", "+")
+                                              .replace("_", "/")
+                                              .replace(",", "=");
+
+        // Decodificar de Base64
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Encoded);
+        return new String(decodedBytes);
     }
 
     private Object getPrincipal(Authentication authentication) {

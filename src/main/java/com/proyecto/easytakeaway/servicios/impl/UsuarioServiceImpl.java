@@ -126,6 +126,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new UsuarioException(UsuarioException.NO_ADMIN_USUARIO);
         }
 
+        if(usuario.getUsuarioID()!=null && usuario.getUsuarioID().intValue()==2) {
+            throw new UsuarioException(UsuarioException.NO_DEFAULT_USUARIO);
+        }
+
         if(pedidosService.tieneLineasPedidoUsuario(id)) {
             throw new UsuarioException(UsuarioException.ERROR_BORRAR_TIENE_LINEAS_PEDIDOS);
         }

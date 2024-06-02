@@ -42,11 +42,14 @@
                         <div th:if="${pedido?.tipoEnvio} eq '0'">
                             <td>[[#{pedidos.envio.local}]]</td>
                         </div>
-                        <div th:unless="${pedido.tipoEnvio} eq '0'">
+                        <div th:if="${pedido.tipoEnvio} eq '1'">
                             <td>[[#{pedidos.envio.domicilio}]]
                                 <a class="fas fa-search-location" data-toggle="modal" th:href="'#datosEnvio' + ${pedido?.id}" role="button"></a>
                                 <div th:replace="~{usuarios/ventanasDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
                             </td>
+                        </div>
+                        <div th:if="${pedido.tipoEnvio} eq '3'">
+                            <td></td>
                         </div>
                         <td>[[${pedido.importeTotal}]] &#8364;</td>
                         <td><a class="fas fa-file-pdf fa-lg" th:href="'/pedidos/descargarTicket/' + ${pedido?.id}" role="button"></a></td>

@@ -5,6 +5,7 @@
 package com.proyecto.easytakeaway.modelos;
 
 import com.proyecto.easytakeaway.dto.LineaPedidoDTO;
+import com.proyecto.easytakeaway.dto.MesaDTO;
 import com.proyecto.easytakeaway.dto.PedidoDTO;
 import com.proyecto.easytakeaway.dto.UsuarioDTO;
 import jakarta.persistence.*;
@@ -120,6 +121,15 @@ public class Pedido {
             pedido.setCiudad(this.getEnvio().getCiudad());
             pedido.setCodigoPostal(this.getEnvio().getCodigoPostal());
             pedido.setEstadoEnvio(this.getEnvio().getEstado());
+        }
+
+        if(this.getMesaID()!=null) {
+            MesaDTO mesaDTO = new MesaDTO();
+            mesaDTO.setId(this.getMesaID().getId());
+            mesaDTO.setNumeroMesa(this.getMesaID().getNumeroMesa());
+            mesaDTO.setCapacidad(this.getMesaID().getCapacidad());
+            mesaDTO.setImagenQR(this.getMesaID().getImagenQR());
+            pedido.setMesa(mesaDTO);
         }
 
         return pedido;

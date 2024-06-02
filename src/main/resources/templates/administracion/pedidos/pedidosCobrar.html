@@ -140,13 +140,16 @@
                 <div th:if="${pedido?.tipoEnvio} eq '0'">
                     <td>[[#{admin.pedidos.envio.local}]]</td>
                 </div>
-                <div th:unless="${pedido.tipoEnvio} eq '0'">
+                <div th:if="${pedido.tipoEnvio} eq '1'">
                     <td>[[#{admin.pedidos.envio.domicilio}]]
                         <a data-toggle="modal" th:href="'#datosEnvio' + ${pedido?.id}" role="button">
                             <i class="fas fa-search-location"></i>
                         </a>
                         <div th:replace="~{administracion/pedidos/ventanaDatos :: ventanaDatosEnvio(${pedido?.id})}"></div>
                     </td>
+                </div>
+                <div th:if="${pedido.tipoEnvio} eq '3'">
+                    <td></td>
                 </div>
                 <td th:text="${pedido?.estadoEnvio}"></td>
                 <td>[[${pedido.importeTotal}]] &#8364;</td>

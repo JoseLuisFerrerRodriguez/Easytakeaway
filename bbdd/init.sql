@@ -14,7 +14,7 @@ FLUSH PRIVILEGES;
 USE easytakeawaybbdd;
 
 -- Drop tables
-DROP TABLE IF EXISTS lineasPedido;
+DROP TABLE IF EXISTS lineaspedido;
 DROP TABLE IF EXISTS envios;
 DROP TABLE IF EXISTS pedidos;
 DROP TABLE IF EXISTS mesas;
@@ -137,9 +137,12 @@ INSERT INTO roles(Nombre) VALUES ("administrador");
 -- admin/1234
 INSERT INTO usuarios (usuarioID, login, password, rolID) VALUES (1, 'admin@email.com', '$2a$10$rLqElIj6qV89/3NmVwAKhuvxbWzyZMjoPf0dBH3Pl.yeQ4rrJmTO2',(SELECT rolID FROM roles WHERE nombre="administrador"));
 INSERT INTO usuariosinfo (usuarioID, nombre, apellido, via, direccion, numero, restoDireccion, ciudad, codigoPostal, telefono, email) VALUES (1, 'Administrador', '', '', '', '', '', 'Murcia', '', '111222333', 'administrador@email.com');
+-- default/default!13579#
+INSERT INTO usuarios (usuarioID, login, password, rolID) VALUES (2, 'default@email.com', '$2a$10$KfNYCCs8jJPEE8VFw1bIHe7IyOop.7u5jgKRZzki7BURLZeH3q/3S',(SELECT rolID FROM roles WHERE nombre="usuario"));
+INSERT INTO usuariosinfo (usuarioID, nombre, apellido, via, direccion, numero, restoDireccion, ciudad, codigoPostal, telefono, email) VALUES (2, 'Usuario mesas', '', '', '', '', '', '', '', '', 'default@email.com');
 -- usuario/1234
-INSERT INTO usuarios (usuarioID, login, password, rolID) VALUES (2, 'usuario@email.com', '$2a$10$rLqElIj6qV89/3NmVwAKhuvxbWzyZMjoPf0dBH3Pl.yeQ4rrJmTO2',(SELECT rolID FROM roles WHERE nombre="usuario"));
-INSERT INTO usuariosinfo (usuarioID, nombre, apellido, via, direccion, numero, restoDireccion, ciudad, codigoPostal, telefono, email) VALUES (2, 'Juan antonio', 'García', 'Calle', 'Principal', '1', 'Puerta 1', 'Murcia', '30820', '600777888', 'usuario@email.com');
+INSERT INTO usuarios (usuarioID, login, password, rolID) VALUES (3, 'usuario@email.com', '$2a$10$rLqElIj6qV89/3NmVwAKhuvxbWzyZMjoPf0dBH3Pl.yeQ4rrJmTO2',(SELECT rolID FROM roles WHERE nombre="usuario"));
+INSERT INTO usuariosinfo (usuarioID, nombre, apellido, via, direccion, numero, restoDireccion, ciudad, codigoPostal, telefono, email) VALUES (3, 'Juan antonio', 'García', 'Calle', 'Principal', '1', 'Puerta 1', 'Murcia', '30820', '600777888', 'usuario@email.com');
 
 INSERT INTO categorias (nombre, alias, descripcion, imagen, activado, padre_id, todos_padres_ids) VALUES ('Comida', 'comida', 'Categoria para todo tipo de comida', '1.png', true, null, null);
 INSERT INTO categorias (nombre, alias, descripcion, imagen, activado, padre_id, todos_padres_ids) VALUES ('Bebida', 'bebida', 'Categoria para todo tipo de bebida', '2.png', true, null, null);

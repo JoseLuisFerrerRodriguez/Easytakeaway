@@ -7,18 +7,22 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto.easytakeaway.configuracion.AppConstants;
 import com.proyecto.easytakeaway.dto.LineaPedidoDTO;
+import com.proyecto.easytakeaway.dto.MesaDTO;
 import com.proyecto.easytakeaway.dto.PedidoDTO;
 import com.proyecto.easytakeaway.dto.UsuarioDTO;
 import com.proyecto.easytakeaway.excepciones.PedidoErrorException;
 import com.proyecto.easytakeaway.modelos.EstadoPedido;
 import com.proyecto.easytakeaway.modelos.Pedido;
 import com.proyecto.easytakeaway.servicios.EmailService;
+import com.proyecto.easytakeaway.servicios.MesaService;
 import com.proyecto.easytakeaway.servicios.PedidosService;
 import com.proyecto.easytakeaway.servicios.UsuarioService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.ContentType;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -66,6 +70,9 @@ public class PedidosController {
     private UsuarioService usuarioService;
 
     @Autowired
+    private MesaService mesasService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping("/pedidos")
@@ -82,7 +89,7 @@ public class PedidosController {
     }
 
     @GetMapping("/procesar")
-    public String crearPedido(Model model, Principal principal) {
+    public String crearPedido(Model model, Principal principal, HttpServletRequest request) {
         if (principal != null) {
             UsuarioDTO usuario = usuarioService.findByUsuario(principal.getName());
             List<LineaPedidoDTO> sinPedido = filtrarLineasSinPedido(usuario.getLineasPedido());
@@ -100,6 +107,9 @@ public class PedidosController {
             pedido.setCiudad(usuario.getCiudad());
             pedido.setCodigoPostal(usuario.getCodigoPostal());
 
+            List<MesaDTO> mesas = mesasService.obtenerTodas();
+
+            model.addAttribute("listaMesas", mesas);
             model.addAttribute("pedido", pedido);
             model.addAttribute("usuario", usuario);
             model.addAttribute("lineasPedido", sinPedido);
@@ -107,13 +117,27 @@ public class PedidosController {
             model.addAttribute("errorMessage", new NotFoundException("No se han encontrado las lineas del pedido"));
             return "error";
         }
+
+        HttpSession session = request.getSession(true);
+        MesaDTO mesa = (MesaDTO) session.getAttribute("mesa");
+        if(mesa != null)
+            return "usuarios/procesarPedidoLocal";
+
         return "usuarios/procesarPedido";
     }
 
     @PostMapping("/procesar")
-    public String guardarPedido(PedidoDTO nuevoPedido, Principal principal, Model model, RedirectAttributes attributes) {
+    public String guardarPedido(PedidoDTO nuevoPedido, Principal principal, Model model, RedirectAttributes attributes, HttpServletRequest request) {
         UsuarioDTO usuario = usuarioService.findByUsuario(principal.getName());
         List<LineaPedidoDTO> lineasPedido = filtrarLineasSinPedido(usuario.getLineasPedido());
+
+        // Verificar si viene establecido una mesa
+        HttpSession session = request.getSession(true);
+        MesaDTO mesa = (MesaDTO) session.getAttribute("mesa");
+
+        if(mesa!= null) {
+            nuevoPedido.setMesa(mesa);
+        }
 
         // Validar
         boolean isValidated = validaryActualizarProcesoPedido(nuevoPedido, lineasPedido, model);
@@ -139,8 +163,12 @@ public class PedidosController {
 
         // Enviar email de confirmacion
         try {
-            emailService.enviarEmailConfirmacion(usuario, nuevoPedido);
-            attributes.addFlashAttribute("message", "El pedido ha sido completado");
+            if( usuario.getId() != 1 && usuario.getId() != 2
+                && !usuario.getRol().equalsIgnoreCase("empleado") ) {
+                emailService.enviarEmailConfirmacion(usuario, nuevoPedido);
+                attributes.addFlashAttribute("message", "El pedido ha sido completado");
+            }
+
         } catch(MessagingException | UnsupportedEncodingException ex) {
 
         }
@@ -171,30 +199,43 @@ public class PedidosController {
     private boolean validaryActualizarProcesoPedido(PedidoDTO nuevoPedido, List<LineaPedidoDTO> lineasPedido, Model model) {
         boolean isValidated = true;
 
-        // 1.- Que el tipo de envio y pago sean correctos
-        if(nuevoPedido.getTipoEnvio() == 1 && nuevoPedido.getTipoPago() == 0) {
-            isValidated = false;
-            model.addAttribute("errpago", "true");
+        boolean pedidoLocal = false;
+
+        if(nuevoPedido.getMesa() != null) {
+            if(nuevoPedido.getMesa().getId() == 0) {
+                nuevoPedido.setMesa(null);
+            } else {
+                nuevoPedido.setTipoEnvio(3);
+                pedidoLocal = true;
+            }
         }
 
-        // 2.- Si el tipo de envio es a domicilio, la dirección debe estar rellenada.
-        if(nuevoPedido.getTipoEnvio() == 1) {
-            String direccion = nuevoPedido.getDireccion();
-            String ciudad = nuevoPedido.getCiudad();
-            String codigopostal = nuevoPedido.getCodigoPostal();
-            if(direccion == null || direccion.isEmpty() || direccion.length() < 5) {
+        if(!pedidoLocal) {
+            // 1.- Que el tipo de envio y pago sean correctos
+            if(nuevoPedido.getTipoEnvio() == 1 && nuevoPedido.getTipoPago() == 0) {
                 isValidated = false;
-                model.addAttribute("errdireccion", "true");
+                model.addAttribute("errpago", "true");
             }
 
-            if(ciudad == null || ciudad.isEmpty() || ciudad.length() < 5) {
-                isValidated = false;
-                model.addAttribute("errciudad", "true");
-            }
+            // 2.- Si el tipo de envio es a domicilio, la dirección debe estar rellenada.
+            if(nuevoPedido.getTipoEnvio() == 1) {
+                String direccion = nuevoPedido.getDireccion();
+                String ciudad = nuevoPedido.getCiudad();
+                String codigopostal = nuevoPedido.getCodigoPostal();
+                if(direccion == null || direccion.isEmpty() || direccion.length() < 5) {
+                    isValidated = false;
+                    model.addAttribute("errdireccion", "true");
+                }
 
-            if(codigopostal == null || codigopostal.isEmpty() || codigopostal.length() < 5) {
-                isValidated = false;
-                model.addAttribute("errcodigopostal", "true");
+                if(ciudad == null || ciudad.isEmpty() || ciudad.length() < 5) {
+                    isValidated = false;
+                    model.addAttribute("errciudad", "true");
+                }
+
+                if(codigopostal == null || codigopostal.isEmpty() || codigopostal.length() < 5) {
+                    isValidated = false;
+                    model.addAttribute("errcodigopostal", "true");
+                }
             }
         }
 

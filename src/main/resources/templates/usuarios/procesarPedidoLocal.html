@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" th:lang="${#locale.language}">
+<head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
+
+<body class="bg-white">
+<div class="container">
+    <a href="/" class="navbar-brand waves-effect rounded mt-2">
+        <img class="img-rounded" th:src="@{/img/logo.jpg}" width="50" height="50">
+    </a>
+    <div class="language_selector mt-4 float-right row">
+        <div class="col border-right">
+            <a class="custom_link waves-effect rounded" th:href="@{'?lang=es'}">[[#{menu.leng.españa}]]</a>
+        </div>
+        <div class="col">
+            <a class="custom_link waves-effect rounded" th:href="@{'?lang=en'}">[[#{menu.leng.ingles}]]</a>
+        </div>
+    </div>
+    <hr class="mt-0"/>
+
+    <div class="py-4 left">
+        <h2>[[#{proceso.pedido.titulo}]]</h2>
+    </div>
+    <div class="py-4 left" th:if="${error}">
+        <div class="alert alert-danger">[[#{proceso.pedido.error}]]</div>
+    </div>
+    <div class="row">
+        <div class="custom_product col-md-4 order-md-2 mb-4 sticky-top">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">[[#{proceso.pedido.carrito}]]</span>
+            </h4>
+            <ul class="custom_product list-group mb-3 sticky-top">
+                <div class="items" th:each="lp: ${lineasPedido}">
+                    <div class="product" th:with="producto = ${lp.producto}">
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <img class="img-fluid mx-auto d-block image" th:src="'/content/img/productos/'+${producto.imagenURL}" width="50" height="50"/>
+                                <h6 class="my-0">
+                                    <a th:text="${producto.nombre}" th:href="@{'/producto/' + ${producto.alias}}"></a>
+                                </h6>
+                            </div>
+                            <div class="text-muted my-3">
+                                <span>x</span><span>[[${lp.cantidad}]]</span>
+                            </div>
+                            <div class="text-muted my-3">
+                                    <span class="productSubtotal" th:id="'subtotal' + ${producto.id}">[[${#numbers.formatDecimal(lp.subtotal,0,2,'COMMA')}]]</span><span>&#8364;</span>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+                <li class="list-group-item d-flex justify-content-between">
+                    <div class="summary-item"><span class="text">[[#{proceso.pedido.total}]]</span>
+                        <span class="price" style="margin-left: 70px; font-size: 21px; font-weight: 500;" id="totalAmount"></span>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class=" text-center">
+                        <label for="checkoutBtn" class="btn custom_buttons btn-md my-0 p rounded" tabindex="0">[[#{proceso.pedido.aceptar}]]</label>
+                        <a th:href="@{'/carrito'}" class="d-flex justify-content-center">
+                            <button type="button" class="btn-lg btn-sm mt-3 custom_buttons">[[#{proceso.pedido.cancelar}]]
+                            </button>
+                        </a>
+                    </div>
+                    <span class="grey-text" style="font-size: 12px">[[#{proceso.pedido.terminos}]]
+                    <ul class="ml-2">
+                        <li class="ml-3">
+                            [[#{proceso.pedido.termino1}]]
+                        </li>
+                        <li class="ml-3">
+                            [[#{proceso.pedido.termino2}]]
+                        </li>
+                    </ul></span>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-md-8 order-md-1">
+            <form th:action="@{/procesar}" th:object="${pedido}" onsubmit="return check(this);" method="post">
+                <input type="hidden" th:field="*{importeTotal}" id="importeTotal" />
+                <input type="hidden" th:field="*{tipoPago}" id="tipoPago" />
+                <input type="submit" id="checkoutBtn" class="d-none"/>
+            </form>
+        </div>
+    </div>
+    <div th:insert="~{plantilla/base :: scripts}"></div>
+    <script>
+        $(document).ready(function () {
+            total = 0.0;
+            $(".productSubtotal").each(function (index, element) {
+                subtotal = parseFloat(element.innerHTML.replace(',','.'));
+                total = total + subtotal;
+            });
+
+            let numFormat = parseFloat(total).toFixed(2);
+            $("#totalAmount").text(numFormat.toString().replace('.',',') + "\u20AC");
+        });
+
+        function check(form) {
+            var total = document.getElementById('totalAmount').innerText;
+            var importeTotal = document.getElementById('importeTotal');
+            importeTotal.value= parseFloat(total.replace(',','.'));
+
+            var tipoPago = document.getElementById('tipoPago');
+            tipoPago.value = 0;
+
+            return true;
+        }
+
+    </script>
+    <footer th:insert="~{plantilla/base :: pie}"></footer>
+</div>
+</body>
+</html>

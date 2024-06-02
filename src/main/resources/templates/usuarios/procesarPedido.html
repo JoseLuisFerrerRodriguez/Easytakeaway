@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" th:lang="${#locale.language}">
 <head th:replace="~{plantilla/base:: head(#{nombreEmpresa}, 'none')}"></head>
 
 <body class="bg-white">
@@ -73,7 +73,7 @@
 
             </ul>
         </div>
-        <div class="col-md-8 order-md-1">
+        <div th:if="${session.mesa == null}" class="col-md-8 order-md-1">
             <h5 class="mb-4">[[#{proceso.pedido.detalleContacto}]]</h5>
             <div class="userInfo">
                 <div class="row ml-4">
@@ -98,12 +98,25 @@
                 </div>
             </div>
 
-            <hr class="mb-4">
-
-            <h5 class="mb-3">[[#{proceso.pedido.detalleEntrega}]]</h5>
-
             <form th:action="@{/procesar}" th:object="${pedido}" onsubmit="return check(this);" method="post">
                 <input type="hidden" th:field="*{importeTotal}" id="importeTotal" />
+
+                <div sec:authorize="hasRole('administrador') or hasRole('empleado')">
+                    <hr class="mb-4">
+                    <h5 class="mb-3">[[#{proceso.pedido.mesa}]]</h5>
+                    <h6>[[#{proceso.pedido.numeromesa}]]</h6>
+                    <div class="d-block my-3">
+                        <select class="custom-control ml-4" th:field="*{mesa.id}">
+                            <option value="0"></option>
+                            <th:block th:each="mesa :${listaMesas}">
+                                <option th:value="${mesa.id}">[[${mesa.numeroMesa}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+                <h5 class="mb-3">[[#{proceso.pedido.detalleEntrega}]]</h5>
                 <h6>[[#{proceso.pedido.tipoenvio}]]</h6>
                 <div class="d-block my-3">
                     <div class="custom-control custom-radio ml-4">

@@ -22,9 +22,7 @@ public interface PedidosService {
 
     List<PedidoDTO> obtenerTodosPorUsuario(UsuarioDTO usuario);
 
-
     void guardarNuevoPedido(PedidoDTO nuevoPedido, UsuarioDTO usuario, List<LineaPedidoDTO> lineasPedido) throws PedidoErrorException;
-
 
     void cambiarEstado(int id, String estado) throws PedidoErrorException;
 
