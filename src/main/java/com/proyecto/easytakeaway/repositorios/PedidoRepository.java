@@ -35,13 +35,13 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query("SELECT sum(importeTotal) FROM Pedido p")
     public Float sumaVentas();
 
-    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 0 AND mesaID IS NOT NULL")
+    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 3 AND mesaID IS NOT NULL")
     public Float sumaVentasLocal();
 
-    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 2")
+    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 1")
     public Float sumaVentasDomicilio();
 
-    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 1")
+    @Query("SELECT sum(importeTotal) FROM Pedido p WHERE tipoEnvio = 0")
     public Float sumaVentasRecogida();
 
     @Query("SELECT sum(importeTotal) FROM Pedido p WHERE pagado = false")
